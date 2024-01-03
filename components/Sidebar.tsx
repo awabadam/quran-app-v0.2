@@ -10,7 +10,7 @@ export default function Sidebar() {
         <div className="sticky top-0 py-4 px-8 bg-gray-700/50 ">الفهرس</div>
         <div className="  bg-gray-700/50 text-right">
           <div className=" flex flex-col">
-            {ChaptersList.chapters.map((chapter) => (
+            {ChaptersList.chapters.map((chapter: any) => (
               <a
                 href={chapter.id}
                 className="m-2 py-2.5 px-8 hover:bg-gray-800 rounded cursor-pointer"

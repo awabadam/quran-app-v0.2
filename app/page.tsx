@@ -8,7 +8,7 @@ export default async function Home() {
   return (
     <main className="flex flex-col items-center justify-between bg-gray-600">
       <div className="grid md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6 gap-4 w-[80vw] mt-8">
-        {ChaptersList.chapters.map((Chapter) => (
+        {ChaptersList.chapters.map((Chapter: any) => (
           <ChapterCard
             id={Chapter.id}
             arName={Chapter.name_arabic}
