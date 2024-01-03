@@ -11,7 +11,7 @@ const Scheherazade = Scheherazade_New({
 });
 export const metadata: Metadata = {
   title: "QuranApp",
-  description: "Quran app from Nextjs",
+  description: "Quran app",
 };
 
 export default function RootLayout({
