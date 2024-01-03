@@ -8,7 +8,7 @@ export default async function Page({ params }: any) {
   ).then((res) => res.json());
 
   return (
-    <main className="flex justify-center  text-gray-200">
+    <main className="flex justify-center text-gray-200">
       <div className="flex flex-col w-[90vw] lg:w-1/3 mb-36 leading-loose items-center text-center text-xl tracking-wider font-Scheherazade_New ">
         <h1 className="text-2xl my-8">سورة {surahMeta.chapter.name_arabic}</h1>
         <p>

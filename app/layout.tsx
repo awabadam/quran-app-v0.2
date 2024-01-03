@@ -21,7 +21,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" dir="rtl">
-      <body className={` ${Scheherazade.className} bg-gray-800`}>
+      <body className={` ${Scheherazade.className} bg-gray-900`}>
         <Navbar />
         {children}
       </body>
