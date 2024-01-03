@@ -11,15 +11,15 @@ export default function Sidebar() {
         <div className="sticky top-2 py-4 px-8 text-gray-400 font-bold bg-gray-950 m-2 rounded-xl">
           <Link href={"/"}>الفهرس</Link>
         </div>
-        <div className="   text-right">
+        <div className="text-right">
           <div className=" flex flex-col">
             {ChaptersList.chapters.map((chapter: any) => (
-              <a
-                href={chapter.id}
-                className="m-1 py-2.5 px-8 hover:bg-gray-800 rounded-xl cursor-pointer"
+              <Link
+                href={`/${chapter.id}`}
+                className="mx-2 my-1 py-2.5 px-8 hover:bg-gray-800 rounded-xl cursor-pointer hover:border-transparent border-2 border-gray-600/30 transition-colors"
               >
                 {chapter.name_arabic}
-              </a>
+              </Link>
             ))}
           </div>
         </div>
