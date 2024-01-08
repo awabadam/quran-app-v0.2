@@ -10,14 +10,28 @@ export default async function Page({ params }: any) {
   return (
     <main className="flex justify-center text-gray-300">
       <div className="flex flex-col w-[90vw] lg:w-[40vw] mb-36 leading-loose items-center text-center text-2xl tracking-wider font-Scheherazade_New ">
-        <div className="sticky top-24 bg-gray-900 border-2 border-gray-800 rounded-xl w-[40vw] flex p-4 justify-between items-center">
-          <h1 className="text-xl"> {surahMeta.chapter.name_arabic}</h1>
-          <div className=" text-sm">
-            <p>{surahMeta.chapter.id}</p>
-            <p>{surahMeta.chapter.verses_count}</p>
+        <div className="sticky top-2 bg-gradient-to-b from-gray-900 to-gray-900 border-2 border-gray-800 rounded-xl w-full flex p-4 justify-between items-center">
+          <div className="text-gray-500 w-36 flex">
+            <p className="text-sm">
+              الترتيب{" "}
+              <span className="text-lg font-bold">{surahMeta.chapter.id}</span>
+            </p>
+          </div>
+          <div>
+            <h1 className="text-lg">سورة {surahMeta.chapter.name_arabic}</h1>
+          </div>
+          <div className="text-gray-500 w-36 flex justify-end">
+            <p className="text-sm">
+              عدد الآيات{" "}
+              <span className="text-lg font-bold">
+                {surahMeta.chapter.verses_count}
+              </span>
+            </p>
           </div>
         </div>
+
         <div className="mt-4">
+          <h2 className="my-4">بسم الله الرحمن الرحيم</h2>
           <p>
             {surah.verses.map((verse: any, index: any) => (
               <>

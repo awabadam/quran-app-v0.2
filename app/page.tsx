@@ -6,7 +6,7 @@ export default async function Home() {
   ).then((res) => res.json());
 
   return (
-    <main className="flex flex-col items-center justify-between bg-gray-900">
+    <main className="flex flex-col items-center justify-between ">
       <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 w-[80vw] mt-8">
         {ChaptersList.chapters.map((Chapter: any) => (
           <ChapterCard
