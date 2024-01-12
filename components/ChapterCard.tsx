@@ -4,22 +4,23 @@ export function ChapterCard({ id, arName, enName, verses, place }: any) {
   return (
     <Link
       href={`/${id}`}
-      className="h-full w-full p-4 bg-gradient-to-b from-gray-800 to-gray-900 rounded-2xl border-2 border-gray-800 text-gray-500"
+      className="h-full flex flex-col w-full p-2 md:p-4 pb-0 bg-gradient-to-b from-gray-800 to-gray-900 rounded-2xl border border-gray-900 text-gray-500 transition-all duration-700 ease-in-out  hover:border-gray-600 hover:shadow-lg hover:shadow-black/50 hover:brightness-125"
     >
-      <div className="bg-gray-900 rounded-lg text-gray-500 border-gray-700 border-2 h-48 flex justify-center items-center text-4xl font-arabic">
-        سورة {arName}
-      </div>
-      <div className="font-english p-2 text-sm">
-        <div className="flex items-center justify-between">
-          <h3 className="font-semibold">{enName}</h3>{" "}
-          <p>
-            {" "}
-            <span className="font-semibold">{verses}</span> verses
-          </p>
+      <div className="bg-gray-900 rounded-lg text-gray-500 border-gray-700 border md:h-36 flex md:flex-col md:justify-center justify-between items-center  w-full gap-4 hover:text-gray-300 transition-all duration-300 ease-in-out hover:text-[38px] p-2 ">
+        <div className="font-arabic text-2xl md:text-4xl"> سورة {arName}</div>
+        <div>
+          <h3 className="font-base text-xs font-english">Surah {enName}</h3>
         </div>
-        <div className="flex items-center justify-between">
-          <p>#{id}</p>
-          <p>{place}</p>
+      </div>
+      <div className="font-english w-full text-gray-600 px-2 py-1 flex flex-col gap-2 md:text-sm text-xs text-center">
+        <div className="flex gap-2 items-center justify-between">
+          <div className="flex gap-2">
+            <p>#{id}</p>
+            <p>{place}</p>
+          </div>
+          <p>
+            Verses <span className="font-semibold">{verses}</span>
+          </p>
         </div>
       </div>
     </Link>

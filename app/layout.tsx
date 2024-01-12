@@ -22,7 +22,7 @@ export default function RootLayout({
   return (
     <html lang="ar" dir="rtl">
       <body
-        className={` ${Scheherazade.className} bg-gradient-to-b from-gray-900 to-gray-950`}
+        className={` ${Scheherazade.className} bg-gradient-to-b from-gray-900 to-gray-950 `}
       >
         <Navbar />
         {children}
