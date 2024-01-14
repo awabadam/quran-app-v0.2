@@ -4,7 +4,7 @@ import React from "react";
 function page() {
   return (
     <div className="text-white flex justify-center items-center border-2">
-      <Qpage />
+      <Qpage surah={"5"} />
     </div>
   );
 }

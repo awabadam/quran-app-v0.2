@@ -1,12 +1,23 @@
 import Link from "next/link";
+import Image from "next/image";
+import QLogo from "./QLogo";
 
 export default function Navbar() {
   return (
-    <header className="bg-gradient-to-b z-50 from-gray-900 via-gray-900/80 to-transparent text-gray-200 w-full h-auto py-[2%] flex justify-center sticky top-0">
-      <div className="flex flex-row items-center justify-center">
-        <Link href={"/"} className="text-xl font-bold font-Scheherazade_New ">
-          القرآن الكريم
+    <header
+      dir="rtl"
+      className="bg-slate-950 z-30 text-gray-200 w-full h-auto py-4 flex justify-center sticky top-0"
+    >
+      <div className="flex flex-row items-center w-[94vw] justify-between gap-2">
+        <Link href={"/"} className="text-xl font-bold font-english  ">
+          <div className="md:h-12 h-8 fill-slate-300">
+            <QLogo />
+          </div>
         </Link>
+        <div className="gap-4 flex text-slate-400">
+          <Link href={"/"}>الرئيسية</Link>
+          <Link href={"/about"}>عن المشروع</Link>
+        </div>
       </div>
     </header>
   );

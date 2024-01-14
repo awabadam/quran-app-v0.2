@@ -6,19 +6,20 @@ const ChaptersList: any = await fetch(
 
 export default function Sidebar() {
   return (
-    <aside className="fixed top-0 right-0 m-2 w-48 h-[98vh] bg-gray-700 rounded-2xl overflow-y-scroll text-gray-300 text-xl hidden md:block font">
+    <aside className="fixed top-18 right-0 w-60 h-[92vh]  overflow-y-scroll border-l border-slate-800 text-gray-400 text-xl hidden md:block font">
       <div>
-        <div className="sticky top-2 py-4 px-8 text-gray-400 font-bold bg-gray-950 m-2 rounded-xl">
+        <div className="sticky top-0 py-4 pr-14 text-gray-400 font-bold bg-slate-900 border-b border-slate-800 rounded-t text-right">
           <Link href={"/"}>الفهرس</Link>
         </div>
-        <div className="text-right">
+        <div className="text-right mt-2">
           <div className=" flex flex-col">
             {ChaptersList.chapters.map((chapter: any) => (
               <Link
                 href={`/${chapter.id}`}
-                className="mx-2 my-1 py-2.5 px-8 hover:bg-gray-800 rounded-xl cursor-pointer hover:border-transparent border-2 border-gray-600/30 transition-colors"
+                className="mx-2 my-1 py-2.5 pr-12 pl-4 hover:bg-slate-800 rounded cursor-pointer hover:border-transparent duration-500 transition-all flex justify-between"
               >
-                {chapter.name_arabic}
+                <div>{chapter.id}</div>
+                <div>{chapter.name_arabic}</div>
               </Link>
             ))}
           </div>

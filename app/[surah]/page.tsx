@@ -1,6 +1,8 @@
+import Bismillah from "@/components/Bismillah";
+
 export default async function Page({ params }: any) {
   const surah: any = await fetch(
-    `https://api.quran.com/api/v4/quran/verses/uthmani?chapter_number=${params.surah}&page=1&per_page=10`
+    `https://api.quran.com/api/v4/quran/verses/uthmani?chapter_number=${params.surah}`
   ).then((res) => res.json());
 
   const surahMeta: any = await fetch(
@@ -10,7 +12,7 @@ export default async function Page({ params }: any) {
   return (
     <main className="flex justify-center text-gray-300">
       <div className="flex flex-col w-[90vw] lg:w-[40vw] mb-36 leading-loose items-center text-center text-2xl tracking-wider font-Scheherazade_New ">
-        <div className="sticky top-2 bg-gradient-to-b from-gray-900 to-gray-900 border-2 border-gray-800 rounded-xl w-full flex p-4 justify-between items-center">
+        <div className="sticky z-40 top-2 mt-2 bg-gradient-to-b from-gray-900 to-gray-900 border-2 border-gray-800 rounded-xl w-full flex p-4 justify-between items-center drop-shadow-lg shadow-slate-950">
           <div className="text-gray-500 w-36 flex">
             <p className="text-sm">
               الترتيب{" "}
@@ -31,7 +33,7 @@ export default async function Page({ params }: any) {
         </div>
 
         <div className="mt-4">
-          <h2 className="my-4">بسم الله الرحمن الرحيم</h2>
+          {surahMeta.chapter.bismillah_pre ? <Bismillah /> : <></>}
           <p>
             {surah.verses.map((verse: any, index: any) => (
               <>

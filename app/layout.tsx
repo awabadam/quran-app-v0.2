@@ -1,4 +1,3 @@
-import Sidebar from "@/components/Sidebar";
 import "./globals.css";
 import type { Metadata } from "next";
 import Navbar from "@/components/Navbar";
@@ -20,7 +19,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="ar" dir="rtl">
+    <html lang="ar">
       <body
         className={` ${Scheherazade.className} bg-gradient-to-b from-gray-900 to-gray-950 `}
       >
