@@ -1,12 +1,18 @@
 "use client";
 
-import { Fragment, useEffect, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import Link from "next/link";
 
 export default function SideMenu() {
+  interface chaptersListType {
+    chapters: any;
+    length: number;
+  }
   const [open, setOpen] = useState(false);
-  const [chaptersList, setChaptersList] = useState<any[]>([]);
+  const [chaptersList, setChaptersList] = React.useState(
+    {} as chaptersListType
+  );
 
   useEffect(() => {
     const fetchData = async () => {
