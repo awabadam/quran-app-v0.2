@@ -6,7 +6,7 @@ import Link from "next/link";
 
 export default function SideMenu() {
   const [open, setOpen] = useState(false);
-  const [chaptersList, setChaptersList] = useState([]);
+  const [chaptersList, setChaptersList] = useState<any[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
