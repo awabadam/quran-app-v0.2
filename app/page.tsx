@@ -15,7 +15,7 @@ export default async function Home() {
       </div>
       <div
         dir="rtl"
-        className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4 w-[80vw] mt-8"
+        className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4 w-[95vw]"
       >
         {ChaptersList.chapters.map((Chapter: any) => (
           <ChapterCard

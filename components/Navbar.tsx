@@ -6,7 +6,7 @@ export default function Navbar() {
   return (
     <header
       dir="rtl"
-      className="bg-slate-900 z-30 text-gray-200 w-full h-auto py-4 flex justify-center sticky top-0 border-b border-slate-800"
+      className="bg-slate-900 z-30 text-gray-200 w-full md:h-auto py-4 flex justify-center sticky top-0 border-b border-slate-800 h-20"
     >
       <div className="flex flex-row items-center w-[94vw] justify-between gap-2">
         <Link href={"/"} className="text-xl font-bold font-english  ">
