@@ -5,14 +5,8 @@ import { Dialog, Transition } from "@headlessui/react";
 import Link from "next/link";
 
 export default function SideMenu() {
-  interface chaptersListType {
-    chapters: any;
-    length: number;
-  }
   const [open, setOpen] = useState(false);
-  const [chaptersList, setChaptersList] = React.useState(
-    {} as chaptersListType
-  );
+  const [chaptersList, setChaptersList] = useState([] as any);
 
   useEffect(() => {
     const fetchData = async () => {
