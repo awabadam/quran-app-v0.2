@@ -33,7 +33,7 @@ export default function SideMenu() {
   return (
     <div>
       <button
-        className="fixed bottom-10 right-10 p-4 rounded-xl shadow-lg shadow-black text-slate-400 bg-slate-900 border border-slate-700 flex flex-col gap-1.5"
+        className="fixed bottom-4 right-4 md:right-10 md:bottom-10 p-4 rounded-xl shadow-lg shadow-black text-slate-400 bg-slate-900 border border-slate-700 flex flex-col gap-1.5"
         onClick={() => setOpen(true)}
       >
         <div className="w-6 h-[2px] bg-slate-400"></div>

@@ -1,6 +1,13 @@
+"use client";
 import Link from "next/link";
 
-export function ChapterCard({ id, arName, enName, verses, place }: any) {
+export default function ChapterCard({
+  id,
+  arName,
+  enName,
+  verses,
+  place,
+}: any) {
   return (
     <Link
       href={`/${id}`}

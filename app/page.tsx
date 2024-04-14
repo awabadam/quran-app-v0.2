@@ -1,4 +1,4 @@
-import { ChapterCard } from "@/components/ChapterCard";
+import { ChapterCard } from "@/components";
 import QLogo from "@/components/QLogo";
 
 export default async function Home() {

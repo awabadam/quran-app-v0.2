@@ -1,6 +1,6 @@
-import Bismillah from "@/components/Bismillah";
-import SideMenu from "@/components/SideMenu";
+import { Bismillah, SideMenu, VerseCount } from "@/components";
 import Link from "next/link";
+import React from "react";
 
 export default async function Page({ params }: any) {
   const surah: any = await fetch(
@@ -38,12 +38,9 @@ export default async function Page({ params }: any) {
           {surahMeta.chapter.bismillah_pre ? <Bismillah /> : <></>}
           <p className="">
             {surah.verses.map((verse: any, index: any) => (
-              <>
-                {verse.text_uthmani}{" "}
-                <span className="border text-gray-400 font-extrabold border-gray-700 rounded-full text-base mx-0.5 px-1 py-0">
-                  {index + 1}
-                </span>{" "}
-              </>
+              <span key={index} className="hover:bg-black/30">
+                {verse.text_uthmani} <VerseCount count={index + 1} />{" "}
+              </span>
             ))}
           </p>
         </div>
