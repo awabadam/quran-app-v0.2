@@ -38,8 +38,9 @@ export default async function Page({ params }: any) {
           {surahMeta.chapter.bismillah_pre ? <Bismillah /> : <></>}
           <p className="">
             {surah.verses.map((verse: any, index: any) => (
-              <span key={index} className="hover:bg-black/30">
+              <span key={index} className="hover:bg-black/30 group">
                 {verse.text_uthmani} <VerseCount count={index + 1} />{" "}
+                {verse.page_number}
               </span>
             ))}
           </p>
