@@ -1,36 +1,81 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Quran App
+
+A modern, beautiful, and ad-free Quran reading experience built with Next.js.
+
+## Features
+
+- **Browse Surahs** - All 114 surahs with Arabic and English names
+- **Beautiful Arabic Typography** - Optimized Scheherazade New font for clear Quranic text
+- **Daily Athkar** - Morning, evening, and sleep remembrances with tap-to-count tracking
+- **Continue Reading** - Automatically remembers your last reading position
+- **Customizable Reading** - Adjustable font sizes and multiple reading modes (continuous flow or book spread)
+- **Command Palette** - Quick search and navigation with keyboard shortcuts
+- **Responsive Design** - Works beautifully on desktop, tablet, and mobile
+- **Ad-Free** - Clean, distraction-free reading experience
+
+## Tech Stack
+
+- [Next.js 13](https://nextjs.org/) - React framework with App Router
+- [TypeScript](https://www.typescriptlang.org/) - Type safety
+- [Tailwind CSS](https://tailwindcss.com/) - Styling
+- [Framer Motion](https://www.framer.com/motion/) - Animations
+- [Headless UI](https://headlessui.com/) - Accessible UI components
+- [Quran.com API](https://quran.api-docs.io/) - Quran data
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- Node.js 18+ 
+- npm, yarn, pnpm, or bun
+
+### Installation
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/yourusername/quranapp.git
+   cd quranapp
+   ```
+
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+
+3. Run the development server:
+   ```bash
+   npm run dev
+   ```
+
+4. Open [http://localhost:3000](http://localhost:3000) in your browser.
+
+## Scripts
+
+| Command | Description |
+|---------|-------------|
+| `npm run dev` | Start development server |
+| `npm run build` | Build for production |
+| `npm run start` | Start production server |
+| `npm run lint` | Run ESLint |
+
+## Project Structure
+
+```
+├── app/                  # Next.js App Router pages
+│   ├── [surah]/         # Dynamic surah reading page
+│   ├── athkar/          # Daily athkar page
+│   ├── bypage/          # Quran by-page reading
+│   └── about/           # About page
+├── components/          # React components
+├── context/             # React context providers
+├── lib/                 # Data and utilities
+└── public/              # Static assets
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Author
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+**Awab Elkhalil** - [awab.design](https://awab.design)
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+## License
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+This project is open source and available under the [MIT License](LICENSE).
