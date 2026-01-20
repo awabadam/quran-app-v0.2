@@ -26,7 +26,7 @@ A modern, beautiful, and ad-free Quran reading experience built with Next.js.
 
 ### Prerequisites
 
-- Node.js 18+ 
+- Node.js 24.x
 - npm, yarn, pnpm, or bun
 
 ### Installation
