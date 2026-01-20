@@ -1,12 +1,12 @@
 "use client";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, Variants } from "framer-motion";
 import { usePathname } from "next/navigation";
 
 interface PageTransitionProps {
   children: React.ReactNode;
 }
 
-const pageVariants = {
+const pageVariants: Variants = {
   initial: {
     opacity: 0,
     y: 20,
@@ -16,7 +16,7 @@ const pageVariants = {
     y: 0,
     transition: {
       duration: 0.5,
-      ease: [0.4, 0, 0.2, 1],
+      ease: [0.4, 0, 0.2, 1] as [number, number, number, number],
       when: "beforeChildren",
       staggerChildren: 0.1,
     },
@@ -26,7 +26,7 @@ const pageVariants = {
     y: -10,
     transition: {
       duration: 0.3,
-      ease: [0.4, 0, 0.2, 1],
+      ease: [0.4, 0, 0.2, 1] as [number, number, number, number],
     },
   },
 };
@@ -52,7 +52,7 @@ export default function PageTransition({ children }: PageTransitionProps) {
 // Staggered children container
 export const StaggerContainer = motion.div;
 
-export const staggerContainerVariants = {
+export const staggerContainerVariants: Variants = {
   initial: {},
   enter: {
     transition: {
@@ -63,7 +63,7 @@ export const staggerContainerVariants = {
 };
 
 // Individual item for stagger animations
-export const staggerItemVariants = {
+export const staggerItemVariants: Variants = {
   initial: {
     opacity: 0,
     y: 20,
@@ -73,13 +73,13 @@ export const staggerItemVariants = {
     y: 0,
     transition: {
       duration: 0.4,
-      ease: [0.4, 0, 0.2, 1],
+      ease: [0.4, 0, 0.2, 1] as [number, number, number, number],
     },
   },
 };
 
 // Fade in animation
-export const fadeInVariants = {
+export const fadeInVariants: Variants = {
   initial: { opacity: 0 },
   enter: { 
     opacity: 1,
@@ -88,31 +88,31 @@ export const fadeInVariants = {
 };
 
 // Scale in animation
-export const scaleInVariants = {
+export const scaleInVariants: Variants = {
   initial: { opacity: 0, scale: 0.9 },
   enter: { 
     opacity: 1, 
     scale: 1,
-    transition: { duration: 0.4, ease: [0.4, 0, 0.2, 1] }
+    transition: { duration: 0.4, ease: [0.4, 0, 0.2, 1] as [number, number, number, number] }
   },
 };
 
 // Slide in from right
-export const slideInRightVariants = {
+export const slideInRightVariants: Variants = {
   initial: { opacity: 0, x: 30 },
   enter: { 
     opacity: 1, 
     x: 0,
-    transition: { duration: 0.5, ease: [0.4, 0, 0.2, 1] }
+    transition: { duration: 0.5, ease: [0.4, 0, 0.2, 1] as [number, number, number, number] }
   },
 };
 
 // Slide in from left
-export const slideInLeftVariants = {
+export const slideInLeftVariants: Variants = {
   initial: { opacity: 0, x: -30 },
   enter: { 
     opacity: 1, 
     x: 0,
-    transition: { duration: 0.5, ease: [0.4, 0, 0.2, 1] }
+    transition: { duration: 0.5, ease: [0.4, 0, 0.2, 1] as [number, number, number, number] }
   },
 };

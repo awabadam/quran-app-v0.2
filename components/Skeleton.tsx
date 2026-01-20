@@ -4,12 +4,14 @@ import { motion } from "framer-motion";
 // Base Skeleton Component with Shimmer
 interface SkeletonProps {
   className?: string;
+  style?: React.CSSProperties;
 }
 
-export function Skeleton({ className = "" }: SkeletonProps) {
+export function Skeleton({ className = "", style }: SkeletonProps) {
   return (
     <div 
       className={`relative overflow-hidden bg-gray-800/50 rounded-lg ${className}`}
+      style={style}
     >
       <motion.div
         className="absolute inset-0 -translate-x-full"
