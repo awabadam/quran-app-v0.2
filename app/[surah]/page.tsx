@@ -1,72 +1,126 @@
-import { Bismillah, SideMenu, VerseCount } from "@/components";
+import { Bismillah, SideMenu } from "@/components";
 import Link from "next/link";
 import React from "react";
+import SurahView from "@/components/SurahView";
+import SurahHeader from "@/components/SurahHeader";
+
+export async function generateMetadata({ params }: any) {
+  const surahMeta: any = await fetch(
+    `https://api.quran.com/api/v4/chapters/${params.surah}?language=en`
+  ).then((res) => res.json());
+
+  return {
+    title: `Surah ${surahMeta.chapter.name_simple} - ${surahMeta.chapter.name_arabic}`,
+    description: `Read Surah ${surahMeta.chapter.name_simple} (${surahMeta.chapter.name_arabic}) - ${surahMeta.chapter.verses_count} verses`,
+  };
+}
 
 export default async function Page({ params }: any) {
+  // Fetch verses with Uthmani script
   const surah: any = await fetch(
-    `https://api.quran.com/api/v4/quran/verses/uthmani?chapter_number=${params.surah}`
+    `https://api.quran.com/api/v4/quran/verses/uthmani?chapter_number=${params.surah}`,
+    { next: { revalidate: 3600 } }
+  ).then((res) => res.json());
+
+  // Fetch verse metadata including page numbers
+  const versesInfo: any = await fetch(
+    `https://api.quran.com/api/v4/verses/by_chapter/${params.surah}?per_page=300`,
+    { next: { revalidate: 3600 } }
   ).then((res) => res.json());
 
   const surahMeta: any = await fetch(
-    `https://api.quran.com/api/v4/chapters/${params.surah}?language=ar`
+    `https://api.quran.com/api/v4/chapters/${params.surah}?language=ar`,
+    { next: { revalidate: 3600 } }
   ).then((res) => res.json());
+  
+  // Create a map of verse_key to page_number
+  const pageMap: { [key: string]: number } = {};
+  versesInfo.verses?.forEach((v: any) => {
+    pageMap[v.verse_key] = v.page_number;
+  });
 
   return (
-    <main className="flex min-h-[91vh] justify-center text-gray-300">
+    <main className="relative min-h-screen pt-20">
+      {/* Side Menu */}
       <SideMenu />
-      <div className="flex flex-col w-[95vw] lg:w-[40vw] mb-12 leading-loose md:leading-loose items-center justify-center text-center  text-lg md:text-2xl tracking-wider font-Scheherazade_New ">
-        <div className="sticky z-40 top-2 mt-2 w-full bg-gray-900 border border-gray-800 rounded flex p-4 justify-center items-center ">
-          <div className="text-gray-500 text-sm w-full">
-            <p className="">
-              الترتيب{" "}
-              <span className="text-lg font-bold">{surahMeta.chapter.id}</span>
-            </p>
+      
+      {/* Main Content */}
+      <div className="flex flex-col items-center justify-center px-4">
+        <div className="w-full max-w-3xl">
+          {/* Surah Header */}
+          <SurahHeader 
+            id={surahMeta.chapter.id}
+            nameArabic={surahMeta.chapter.name_arabic}
+            nameEnglish={surahMeta.chapter.name_simple}
+            versesCount={surahMeta.chapter.verses_count}
+            revelationPlace={surahMeta.chapter.revelation_place}
+          />
+          
+          {/* Bismillah */}
+          <div className="mt-4">
+            {surahMeta.chapter.bismillah_pre && <Bismillah />}
           </div>
-          <div className=" w-full">
-            <h1 className="text-lg">سورة {surahMeta.chapter.name_arabic}</h1>
+          
+          {/* Verses */}
+          <div className="mt-4 mb-12">
+            <SurahView 
+              verses={surah.verses} 
+              surahId={params.surah}
+              pageMap={pageMap}
+              showBismillah={surahMeta.chapter.bismillah_pre}
+            />
           </div>
-          <div className="text-gray-500 w-full text-xs">
-            <p className="">
-              عدد الآيات{" "}
-              <span className="text-lg font-bold">
-                {surahMeta.chapter.verses_count}
-              </span>
-            </p>
+
+          {/* Navigation */}
+          <div className="border-t border-gray-800/50 pt-12 pb-24">
+            <div className="flex justify-center gap-4 font-english">
+              {Number(params.surah) > 1 && (
+                <Link
+                  href={`/${Number(params.surah) - 1}`}
+                  className="group flex items-center gap-2 px-6 py-3 rounded-xl
+                    bg-gray-900/50 border border-gray-800 
+                    hover:border-emerald-500/30 hover:bg-gray-800/50
+                    text-gray-400 hover:text-emerald-400
+                    transition-all duration-300 btn-press"
+                >
+                  <svg className="w-4 h-4 rotate-180 group-hover:-translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                  <span>Previous</span>
+                </Link>
+              )}
+              
+              <Link
+                href="/"
+                className="flex items-center gap-2 px-6 py-3 rounded-xl
+                  bg-gray-900/50 border border-gray-800 
+                  hover:border-emerald-500/30 hover:bg-gray-800/50
+                  text-gray-400 hover:text-emerald-400
+                  transition-all duration-300 btn-press"
+              >
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 10h16M4 14h16M4 18h16" />
+                </svg>
+                <span>All Surahs</span>
+              </Link>
+              
+              {Number(params.surah) < 114 && (
+                <Link
+                  href={`/${Number(params.surah) + 1}`}
+                  className="group flex items-center gap-2 px-6 py-3 rounded-xl
+                    bg-gray-900/50 border border-gray-800 
+                    hover:border-emerald-500/30 hover:bg-gray-800/50
+                    text-gray-400 hover:text-emerald-400
+                    transition-all duration-300 btn-press"
+                >
+                  <span>Next</span>
+                  <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </Link>
+              )}
+            </div>
           </div>
-        </div>
-        <div className="mt-8">
-          {surahMeta.chapter.bismillah_pre ? <Bismillah /> : <></>}
-          <p className="">
-            {surah.verses.map((verse: any, index: any) => (
-              <span key={index} className="hover:bg-black/30 group">
-                {verse.text_uthmani} <VerseCount count={index + 1} />{" "}
-                {verse.page_number}
-              </span>
-            ))}
-          </p>
-        </div>
-        <hr className="border w-full mt-12 border-slate-800" />
-        <div className="text-sm m-4 rounded-lg flex gap-4 mt-12">
-          {params.surah <= 1 ? (
-            <></>
-          ) : (
-            <Link
-              className="border border-slate-700 p-4 rounded-lg text-slate-300 hover:bg-slate-900"
-              href={`${encodeURIComponent(Number(params.surah) - 1)}`}
-            >
-              السورة السابقة
-            </Link>
-          )}
-          {params.surah >= 114 ? (
-            <></>
-          ) : (
-            <Link
-              className="border border-slate-700 p-4 rounded-lg text-slate-300 hover:bg-slate-900"
-              href={`${encodeURIComponent(Number(params.surah) + 1)}`}
-            >
-              السورة القادمة
-            </Link>
-          )}
         </div>
       </div>
     </main>
