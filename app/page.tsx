@@ -1,31 +1,37 @@
-import { Hero } from "@/components";
-import SurahsGrid from "@/components/SurahsGrid";
+import Hero from "@/components/Hero";
+import SectionDivider from "@/components/SectionDivider";
+import FeatureCards from "@/components/FeatureCards";
+import SurahBrowser from "@/components/SurahBrowser";
 
 export default async function Home() {
-  const ChaptersList: any = await fetch(
-    `https://api.quran.com/api/v4/chapters?language=en`,
-    { next: { revalidate: 3600 } } // Cache for 1 hour
-  ).then((res) => res.json());
+  const [chaptersRes, verseRes] = await Promise.all([
+    fetch("https://api.quran.com/api/v4/chapters?language=en", {
+      next: { revalidate: 3600 },
+    }),
+    fetch(
+      "https://api.quran.com/api/v4/verses/random?language=en&translations=131&fields=text_uthmani,chapter_id,verse_number,verse_key",
+      { next: { revalidate: 86400 } }
+    ),
+  ]);
+
+  const chaptersData = await chaptersRes.json();
+  const verseData = await verseRes.json();
+  const dailyVerse = verseData?.verse;
+
+  // Get surah name for the daily verse
+  const surahName = dailyVerse
+    ? chaptersData.chapters?.find((ch: any) => ch.id === dailyVerse.chapter_id)?.name_simple
+    : undefined;
 
   return (
     <main className="min-h-screen w-full">
-      {/* Hero Section - Full Width */}
-      <Hero />
-      
-      {/* Surahs Section */}
-      <section id="surahs" className="w-full max-w-7xl mx-auto px-4 md:px-6 py-16 md:py-24">
-        {/* Section Header */}
-        <div className="text-center mb-12">
-          <h2 className="text-2xl md:text-3xl font-bold font-english text-gray-100 mb-3">
-            Browse <span className="gradient-text">Surahs</span>
-          </h2>
-          <p className="text-gray-500 font-english">
-            Select a surah to start reading
-          </p>
-        </div>
-        
-        {/* Animated Surahs Grid */}
-        <SurahsGrid chapters={ChaptersList.chapters} />
+      <Hero dailyVerse={dailyVerse} surahName={surahName} />
+
+      <SectionDivider />
+
+      <section id="surahs" className="w-full max-w-7xl mx-auto px-4 md:px-6 py-12 md:py-20">
+        <FeatureCards />
+        <SurahBrowser chapters={chaptersData.chapters} />
       </section>
     </main>
   );

@@ -10,6 +10,8 @@ interface ThikrProps {
   // Optional external state management
   externalCount?: number;
   onCountChange?: (count: number, completed: boolean) => void;
+  // When true, renders without its own card wrapper (for use inside modals)
+  inline?: boolean;
 }
 
 // Confetti particle component
@@ -48,7 +50,7 @@ function ConfettiParticle({ index }: { index: number }) {
   );
 }
 
-export default function Thikr({ Count, thikr, source, benefit, externalCount, onCountChange }: ThikrProps) {
+export default function Thikr({ Count, thikr, source, benefit, externalCount, onCountChange, inline = false }: ThikrProps) {
   const [internalCount, setInternalCount] = useState(externalCount ?? 0);
   const [showRipple, setShowRipple] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
@@ -106,19 +108,22 @@ export default function Thikr({ Count, thikr, source, benefit, externalCount, on
   };
 
   return (
-    <motion.div 
+    <motion.div
       onClick={handleCount}
       className={`
         relative overflow-hidden
-        w-full p-6 rounded-2xl border transition-all duration-300 cursor-pointer select-none
-        ${completed 
-          ? "bg-emerald-900/20 border-emerald-500/50" 
-          : "bg-gray-900/50 border-gray-800 hover:border-gray-700 hover:bg-gray-800/80"
+        w-full transition-all duration-300 cursor-pointer select-none
+        ${inline
+          ? "p-2"
+          : `p-6 rounded-2xl border ${completed
+              ? "bg-emerald-900/20 border-emerald-500/50"
+              : "bg-gray-900/50 border-gray-800 hover:border-gray-700 hover:bg-gray-800/80"
+            }`
         }
       `}
       whileTap={{ scale: completed ? 1 : 0.98 }}
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
+      initial={inline ? undefined : { opacity: 0, y: 20 }}
+      animate={inline ? undefined : { opacity: 1, y: 0 }}
       transition={{ duration: 0.4 }}
     >
       {/* Ripple Effect */}
@@ -172,16 +177,17 @@ export default function Thikr({ Count, thikr, source, benefit, externalCount, on
       )}
 
       <div className="flex flex-col gap-5 relative z-10">
-        {/* Header: Count & Reset */}
+        {/* Header: Count & Reset — hidden in inline mode since the modal has its own header */}
+        {!inline && (
         <div className="flex justify-between items-center">
           <div className="flex items-center gap-3">
             {/* Counter Circle */}
-            <motion.div 
+            <motion.div
               className={`
                 w-14 h-14 rounded-full flex items-center justify-center text-lg font-bold font-english
                 transition-all duration-300
-                ${completed 
-                  ? "bg-emerald-500 text-white" 
+                ${completed
+                  ? "bg-emerald-500 text-white"
                   : "bg-gray-800/80 text-emerald-400 border border-gray-700"
                 }
               `}
@@ -193,11 +199,11 @@ export default function Thikr({ Count, thikr, source, benefit, externalCount, on
             >
               <AnimatePresence mode="wait">
                 {completed ? (
-                  <motion.svg 
+                  <motion.svg
                     key="check"
-                    xmlns="http://www.w3.org/2000/svg" 
-                    viewBox="0 0 20 20" 
-                    fill="currentColor" 
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
                     className="w-7 h-7"
                     initial={{ scale: 0, rotate: -180 }}
                     animate={{ scale: 1, rotate: 0 }}
@@ -218,7 +224,7 @@ export default function Thikr({ Count, thikr, source, benefit, externalCount, on
                 )}
               </AnimatePresence>
             </motion.div>
-            
+
             <div className="flex flex-col">
               <span className="text-xs text-gray-500 font-english">
                 {completed ? "Completed!" : "Remaining"}
@@ -234,10 +240,10 @@ export default function Thikr({ Count, thikr, source, benefit, externalCount, on
           {/* Reset Button */}
           <AnimatePresence>
             {count > 0 && (
-              <motion.button 
+              <motion.button
                 onClick={handleReset}
-                className="text-xs text-gray-500 hover:text-red-400 transition-colors 
-                  px-3 py-1.5 rounded-lg hover:bg-red-500/10 
+                className="text-xs text-gray-500 hover:text-red-400 transition-colors
+                  px-3 py-1.5 rounded-lg hover:bg-red-500/10
                   border border-transparent hover:border-red-500/20 font-english"
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
@@ -250,6 +256,7 @@ export default function Thikr({ Count, thikr, source, benefit, externalCount, on
             )}
           </AnimatePresence>
         </div>
+        )}
 
         {/* Content */}
         <div className="space-y-4">

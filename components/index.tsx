@@ -8,15 +8,18 @@ import VerseCount from "./VerseCount";
 import Hero from "./Hero";
 import PageTransition from "./PageTransition";
 import AnimatedSection, { AnimatedGrid, AnimatedGridItem, TextReveal, AnimatedCounter } from "./AnimatedSection";
+import SectionDivider from "./SectionDivider";
+import FeatureCards from "./FeatureCards";
+import SurahBrowser from "./SurahBrowser";
 
-export { 
-  Bismillah, 
-  ChapterCard, 
-  Navbar, 
-  QLogo, 
-  Sidebar, 
-  SideMenu, 
-  VerseCount, 
+export {
+  Bismillah,
+  ChapterCard,
+  Navbar,
+  QLogo,
+  Sidebar,
+  SideMenu,
+  VerseCount,
   Hero,
   PageTransition,
   AnimatedSection,
@@ -24,4 +27,7 @@ export {
   AnimatedGridItem,
   TextReveal,
   AnimatedCounter,
+  SectionDivider,
+  FeatureCards,
+  SurahBrowser,
 };
