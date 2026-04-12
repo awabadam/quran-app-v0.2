@@ -1,16 +1,55 @@
 "use client";
 
-export default function VerseCount({ count }: { count: number }) {
+import { useBookmarks } from "@/context/BookmarkContext";
+
+interface VerseCountProps {
+  count: number;
+  surahId?: number;
+  surahName?: string;
+  arabicName?: string;
+  verseText?: string;
+}
+
+export default function VerseCount({ count, surahId, surahName, arabicName, verseText }: VerseCountProps) {
+  const { addBookmark, removeBookmark, isBookmarked } = useBookmarks();
+
+  const bookmarked = surahId ? isBookmarked(surahId, count) : false;
+
+  const handleClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (!surahId || !surahName || !arabicName || !verseText) return;
+
+    if (bookmarked) {
+      removeBookmark(surahId, count);
+    } else {
+      addBookmark({ surahId, verseNumber: count, surahName, arabicName, verseText });
+    }
+  };
+
   return (
-    <span className="relative inline-flex items-center justify-center mx-1 group">
-      {/* Background symbol */}
-      <span className="absolute text-4xl text-emerald-500/20 group-hover:text-emerald-500/40 transition-colors duration-300 select-none">
-        ۝
+    <span className="inline-flex items-center justify-center mx-1 select-none group/verse">
+      <span className="text-sm font-english text-emerald-400 tabular-nums">
+        ﴿{count}﴾
       </span>
-      {/* Number */}
-      <span className="relative text-xs font-english font-bold text-emerald-500/60 group-hover:text-emerald-400 transition-colors duration-300">
-        {count}
-      </span>
+      {surahId && (
+        <button
+          onClick={handleClick}
+          className={`ml-0.5 opacity-0 group-hover/verse:opacity-100 transition-opacity duration-200
+            ${bookmarked ? "!opacity-100" : ""}`}
+          title={bookmarked ? "Remove bookmark" : "Bookmark verse"}
+        >
+          <svg
+            className={`w-3 h-3 ${bookmarked ? "text-emerald-400 fill-emerald-400" : "text-gray-600 hover:text-emerald-400"}`}
+            viewBox="0 0 24 24"
+            fill={bookmarked ? "currentColor" : "none"}
+            stroke="currentColor"
+            strokeWidth={2}
+          >
+            <path strokeLinecap="round" strokeLinejoin="round"
+              d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0111.186 0z" />
+          </svg>
+        </button>
+      )}
     </span>
   );
 }

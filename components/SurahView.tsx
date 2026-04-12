@@ -34,11 +34,17 @@ function FlowView({
   pageMap,
   fontSize,
   translationMap,
+  surahId,
+  surahName,
+  arabicName,
 }: {
   verses: any[];
   pageMap: { [key: string]: number };
   fontSize: number;
   translationMap: { [key: string]: string };
+  surahId?: number;
+  surahName?: string;
+  arabicName?: string;
 }) {
   const { showTranslation } = useSettings();
   const [activeVerse, setActiveVerse] = useState<string | null>(null);
@@ -71,7 +77,13 @@ function FlowView({
               onClick={() => setActiveVerse(isActive ? null : verseKey)}
             >
               <span className="text-gray-200">{verse.text_uthmani}</span>{" "}
-              <VerseCount count={index + 1} />{" "}
+              <VerseCount
+                count={index + 1}
+                surahId={surahId}
+                surahName={surahName}
+                arabicName={arabicName}
+                verseText={verse.text_uthmani}
+              />{" "}
             </span>
             {showTranslation && isActive && translation && (
               <span dir="ltr" className="block my-3 mx-2">
@@ -364,6 +376,9 @@ export default function SurahView({
 }: SurahViewProps) {
   const { fontSize, readingMode } = useSettings();
 
+  const surahIdNum = surahId ? parseInt(surahId) : undefined;
+  const surah = surahIdNum ? surahs.find((s) => s.id === surahIdNum) : undefined;
+
   useEffect(() => {
     if (surahId) {
       const surahIdNum = parseInt(surahId);
@@ -390,7 +405,15 @@ export default function SurahView({
         </div>
       ) : (
         <div className="max-w-4xl mx-auto">
-          <FlowView verses={verses} pageMap={pageMap} fontSize={fontSize} translationMap={translationMap} />
+          <FlowView
+            verses={verses}
+            pageMap={pageMap}
+            fontSize={fontSize}
+            translationMap={translationMap}
+            surahId={surahIdNum}
+            surahName={surah?.name}
+            arabicName={surah?.arabic}
+          />
         </div>
       )}
       <SettingsDrawer />
