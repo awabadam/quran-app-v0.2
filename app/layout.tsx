@@ -5,6 +5,7 @@ import Footer from "@/components/Footer";
 import { Scheherazade_New, Inter } from "next/font/google";
 import { SettingsProvider } from "@/context/SettingsContext";
 import { BookmarkProvider } from "@/context/BookmarkContext";
+import { ReadingProgressProvider } from "@/context/ReadingProgressContext";
 import CommandPalette from "@/components/CommandPalette";
 
 const scheherazade = Scheherazade_New({
@@ -75,6 +76,7 @@ export default function RootLayout({
         `}
       >
         <SettingsProvider>
+          <ReadingProgressProvider>
           <BookmarkProvider>
             <ReadingNavProvider>
               <CommandPalette />
@@ -85,6 +87,7 @@ export default function RootLayout({
               <Footer />
             </ReadingNavProvider>
           </BookmarkProvider>
+          </ReadingProgressProvider>
         </SettingsProvider>
       </body>
     </html>
