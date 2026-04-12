@@ -34,11 +34,12 @@ async function searchQuran(query: string, page: number): Promise<SearchResponse 
   return res.json();
 }
 
-export default async function SearchPage({
-  searchParams,
-}: {
-  searchParams: { q?: string; page?: string };
-}) {
+export default async function SearchPage(
+  props: {
+    searchParams: Promise<{ q?: string; page?: string }>;
+  }
+) {
+  const searchParams = await props.searchParams;
   const query = searchParams.q || "";
   const page = Math.max(1, parseInt(searchParams.page || "1", 10));
   const data = await searchQuran(query, page);

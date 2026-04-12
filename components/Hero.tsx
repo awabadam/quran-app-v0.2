@@ -1,5 +1,6 @@
 "use client";
 import { motion } from "framer-motion";
+import Link from "next/link";
 
 interface DailyVerse {
   text_uthmani: string;
@@ -17,159 +18,93 @@ export default function Hero({ dailyVerse, surahName }: HeroProps) {
   const cleanTranslation = dailyVerse?.translations?.[0]?.text?.replace(/<[^>]*>/g, "") || "";
 
   return (
-    <section className="relative w-full min-h-[80vh] flex items-center justify-center overflow-hidden">
-      {/* Animated background blobs */}
-      <motion.div
-        className="absolute w-[600px] h-[600px] rounded-full pointer-events-none"
-        style={{
-          background: "radial-gradient(circle, rgba(16, 185, 129, 0.08) 0%, transparent 70%)",
-          top: "10%",
-          left: "20%",
-        }}
-        animate={{
-          x: [0, 40, -20, 0],
-          y: [0, -30, 20, 0],
-        }}
-        transition={{ duration: 20, repeat: Infinity, ease: "easeInOut" }}
+    <section className="relative w-full min-h-[90vh] flex flex-col items-center justify-center overflow-hidden px-4">
+      {/* Ambient light */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[500px] pointer-events-none"
+        style={{ background: "radial-gradient(ellipse, rgba(16,185,129,0.06) 0%, transparent 70%)" }}
       />
-      <motion.div
-        className="absolute w-[500px] h-[500px] rounded-full pointer-events-none"
-        style={{
-          background: "radial-gradient(circle, rgba(212, 175, 55, 0.05) 0%, transparent 70%)",
-          bottom: "10%",
-          right: "15%",
-        }}
-        animate={{
-          x: [0, -30, 20, 0],
-          y: [0, 25, -15, 0],
-        }}
-        transition={{ duration: 24, repeat: Infinity, ease: "easeInOut" }}
-      />
-      <motion.div
-        className="absolute w-[400px] h-[400px] rounded-full pointer-events-none"
-        style={{
-          background: "radial-gradient(circle, rgba(16, 185, 129, 0.05) 0%, transparent 70%)",
-          top: "50%",
-          right: "40%",
-        }}
-        animate={{
-          x: [0, 25, -15, 0],
-          y: [0, -20, 30, 0],
-        }}
-        transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
+      <div className="absolute bottom-0 right-1/4 w-[500px] h-[400px] pointer-events-none"
+        style={{ background: "radial-gradient(ellipse, rgba(212,175,55,0.03) 0%, transparent 70%)" }}
       />
 
-      {/* Floating geometric decorations */}
-      <div className="absolute inset-0 pointer-events-none hidden sm:block">
-        {/* Top-left star */}
-        <svg className="absolute top-[15%] left-[8%] w-12 h-12 text-emerald-500/[0.07] animate-float" viewBox="0 0 32 32" fill="none" stroke="currentColor" strokeWidth={0.6}>
-          <polygon points="16,2 19.5,12.5 30,16 19.5,19.5 16,30 12.5,19.5 2,16 12.5,12.5" />
-        </svg>
-        {/* Top-right diamond */}
-        <svg className="absolute top-[20%] right-[12%] w-8 h-8 text-gold-500/[0.08] animate-float-slow" viewBox="0 0 32 32" fill="none" stroke="currentColor" strokeWidth={0.6}>
-          <rect x="8" y="8" width="16" height="16" transform="rotate(45 16 16)" />
-        </svg>
-        {/* Bottom-left octagon */}
-        <svg className="absolute bottom-[25%] left-[15%] w-10 h-10 text-emerald-500/[0.06] animate-float-slower" viewBox="0 0 32 32" fill="none" stroke="currentColor" strokeWidth={0.6}>
-          <polygon points="12,2 20,2 30,12 30,20 20,30 12,30 2,20 2,12" />
-        </svg>
-        {/* Bottom-right star */}
-        <svg className="absolute bottom-[18%] right-[8%] w-14 h-14 text-emerald-500/[0.05] animate-spin-slow" viewBox="0 0 32 32" fill="none" stroke="currentColor" strokeWidth={0.4}>
-          <polygon points="16,2 19.5,12.5 30,16 19.5,19.5 16,30 12.5,19.5 2,16 12.5,12.5" />
-          <rect x="8" y="8" width="16" height="16" transform="rotate(45 16 16)" />
-        </svg>
-      </div>
-
-      {/* Content */}
-      <div className="relative z-10 text-center max-w-3xl mx-auto px-4">
-        {/* App identity */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="mb-10"
-        >
-          <div className="w-14 h-14 mx-auto mb-5 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center">
-            <svg className="w-7 h-7 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-            </svg>
-          </div>
-          <h1 className="text-2xl md:text-3xl font-english font-semibold text-white mb-2">
-            Quran App
-          </h1>
-          <p className="text-gray-500 font-english text-sm">
-            Read &bull; Reflect &bull; Remember
-          </p>
-        </motion.div>
-
-        {/* Daily Verse Centerpiece */}
-        {dailyVerse && (
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.2 }}
-            className="mb-10"
-          >
-            <div className="relative px-2 md:px-8 py-6">
-              {/* Decorative quotation marks */}
-              <span className="absolute -top-2 left-2 md:left-4 text-emerald-500/15 text-6xl font-serif leading-none select-none">
-                &#x201C;
-              </span>
-
-              <p dir="rtl" className="font-Scheherazade_New text-arabic-lg md:text-arabic-2xl text-gray-100 text-glow leading-arabic mb-4">
-                {dailyVerse.text_uthmani}
-              </p>
-
-              {cleanTranslation && (
-                <p className="text-gray-400 font-english text-sm md:text-base leading-relaxed max-w-xl mx-auto mb-3">
-                  &ldquo;{cleanTranslation}&rdquo;
-                </p>
-              )}
-
-              <p className="text-emerald-500/70 font-english text-xs tracking-wider uppercase">
-                {surahName && `Surah ${surahName} — `}{dailyVerse.verse_key}
-              </p>
-            </div>
-          </motion.div>
-        )}
-
-        {/* CTAs */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.4 }}
-          className="flex flex-col sm:flex-row gap-3 justify-center"
-        >
-          <a
-            href="#surahs"
-            className="px-8 py-3.5 bg-emerald-500 hover:bg-emerald-400
-              text-gray-950 font-english font-medium rounded-xl
-              transition-colors duration-200"
-          >
-            Browse Surahs
-          </a>
-          <a
-            href="/athkar"
-            className="px-8 py-3.5 bg-white/5 hover:bg-white/10
-              text-gray-300 hover:text-white font-english font-medium rounded-xl
-              transition-all duration-200"
-          >
-            Daily Athkar
-          </a>
-        </motion.div>
-      </div>
-
-      {/* Scroll indicator */}
+      {/* Bismillah */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ duration: 0.5, delay: 0.8 }}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2"
+        transition={{ duration: 1.2 }}
+        className="mb-10"
       >
-        <a href="#surahs" className="flex flex-col items-center gap-2 text-gray-600 hover:text-emerald-400 transition-colors">
-          <div className="w-5 h-8 border border-current rounded-full flex justify-center pt-1.5">
-            <div className="w-1 h-1.5 bg-current rounded-full animate-bounce" />
-          </div>
+        <p dir="rtl" className="font-Scheherazade_New text-2xl md:text-3xl text-white/20 select-none">
+          بِسْمِ ٱللَّهِ ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ
+        </p>
+      </motion.div>
+
+      {/* Daily Verse — the centerpiece */}
+      {dailyVerse && (
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.3 }}
+          className="max-w-3xl text-center mb-12"
+        >
+          <Link href={`/${dailyVerse.chapter_id}`} className="group block">
+            <p dir="rtl" className="font-Scheherazade_New text-arabic-xl md:text-arabic-2xl lg:text-arabic-3xl text-gray-100 text-glow leading-arabic mb-6">
+              {dailyVerse.text_uthmani}
+            </p>
+
+            {cleanTranslation && (
+              <p className="text-gray-500 font-english text-sm md:text-base leading-relaxed max-w-xl mx-auto mb-4 group-hover:text-gray-400 transition-colors">
+                &ldquo;{cleanTranslation}&rdquo;
+              </p>
+            )}
+
+            <span className="inline-flex items-center gap-2 text-emerald-500/60 font-english text-xs tracking-widest uppercase group-hover:text-emerald-400 transition-colors">
+              {surahName && `${surahName} `}{dailyVerse.verse_key}
+              <svg className="w-3 h-3 opacity-0 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            </span>
+          </Link>
+        </motion.div>
+      )}
+
+      {/* CTAs */}
+      <motion.div
+        initial={{ opacity: 0, y: 16 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 0.6 }}
+        className="flex flex-col sm:flex-row gap-3 justify-center"
+      >
+        <a
+          href="#surahs"
+          className="px-8 py-3 bg-emerald-500 hover:bg-emerald-400
+            text-gray-950 font-english font-medium text-sm rounded-full
+            transition-all duration-200 hover:shadow-[0_0_24px_-4px_rgba(16,185,129,0.5)]"
+        >
+          Browse Surahs
+        </a>
+        <a
+          href="/athkar"
+          className="px-8 py-3 bg-white/[0.04] hover:bg-white/[0.08]
+            text-gray-400 hover:text-white font-english font-medium text-sm rounded-full
+            border border-white/[0.06] hover:border-white/[0.12]
+            transition-all duration-200"
+        >
+          Daily Athkar
+        </a>
+      </motion.div>
+
+      {/* Scroll hint */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1.2, duration: 0.6 }}
+        className="absolute bottom-10 left-1/2 -translate-x-1/2"
+      >
+        <a href="#surahs" className="text-white/15 hover:text-white/30 transition-colors">
+          <svg className="w-5 h-5 animate-bounce" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 14l-7 7m0 0l-7-7" />
+          </svg>
         </a>
       </motion.div>
     </section>

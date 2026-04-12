@@ -10,43 +10,27 @@ interface Chapter {
   revelation_place: string;
 }
 
-interface SurahsGridProps {
-  chapters: Chapter[];
-}
-
 const containerVariants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
-    transition: {
-      staggerChildren: 0.03,
-      delayChildren: 0.1,
-    },
+    transition: { staggerChildren: 0.02, delayChildren: 0.05 },
   },
 };
 
 const itemVariants = {
-  hidden: { 
-    opacity: 0, 
-    y: 30,
-    scale: 0.95,
-  },
+  hidden: { opacity: 0, y: 16 },
   visible: {
     opacity: 1,
     y: 0,
-    scale: 1,
-    transition: {
-      type: "spring",
-      stiffness: 100,
-      damping: 15,
-    },
+    transition: { type: "spring", stiffness: 150, damping: 20 },
   },
 };
 
-export default function SurahsGrid({ chapters }: SurahsGridProps) {
+export default function SurahsGrid({ chapters }: { chapters: Chapter[] }) {
   return (
     <motion.div
-      className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 md:gap-5"
+      className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-3 md:gap-4"
       variants={containerVariants}
       initial="hidden"
       whileInView="visible"

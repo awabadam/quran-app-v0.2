@@ -1,7 +1,7 @@
 "use client";
 
-import React, { Fragment, useState } from "react";
-import { Dialog, Transition } from "@headlessui/react";
+import React, { useState } from "react";
+import { Dialog, DialogPanel, Transition, TransitionChild } from "@headlessui/react";
 import Link from "next/link";
 import { surahs } from "@/lib/surahs";
 import { useReadingNav } from "./Navbar";
@@ -29,11 +29,10 @@ export default function SideMenu() {
         </svg>
       </button>
 
-      <Transition.Root show={open} as={Fragment}>
+      <Transition show={open}>
         <Dialog as="div" className="relative z-50" onClose={setOpen}>
-          <Transition.Child
-            as={Fragment}
-            enter="ease-out duration-200"
+          <TransitionChild
+                       enter="ease-out duration-200"
             enterFrom="opacity-0"
             enterTo="opacity-100"
             leave="ease-in duration-150"
@@ -41,21 +40,20 @@ export default function SideMenu() {
             leaveTo="opacity-0"
           >
             <div className="fixed inset-0 bg-black/50 backdrop-blur-sm" />
-          </Transition.Child>
+          </TransitionChild>
 
           <div className="fixed inset-0 overflow-hidden">
             <div className="absolute inset-0 overflow-hidden">
               <div className="pointer-events-none fixed inset-y-0 right-0 flex max-w-full pl-16">
-                <Transition.Child
-                  as={Fragment}
-                  enter="transform transition ease-out duration-300"
+                <TransitionChild
+                                   enter="transform transition ease-out duration-300"
                   enterFrom="translate-x-full"
                   enterTo="translate-x-0"
                   leave="transform transition ease-in duration-200"
                   leaveFrom="translate-x-0"
                   leaveTo="translate-x-full"
                 >
-                  <Dialog.Panel className="pointer-events-auto w-screen max-w-sm">
+                  <DialogPanel className="pointer-events-auto w-screen max-w-sm">
                     <div className="flex h-full flex-col bg-[hsl(240,5%,9%)] border-l border-white/[0.04]">
                       {/* Header */}
                       <div className="px-5 py-4 border-b border-white/[0.04] flex items-center justify-between">
@@ -120,13 +118,13 @@ export default function SideMenu() {
                         ))}
                       </div>
                     </div>
-                  </Dialog.Panel>
-                </Transition.Child>
+                  </DialogPanel>
+                </TransitionChild>
               </div>
             </div>
           </div>
         </Dialog>
-      </Transition.Root>
+      </Transition>
     </div>
   );
 }

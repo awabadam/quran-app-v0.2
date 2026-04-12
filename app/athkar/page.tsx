@@ -69,7 +69,7 @@ export default function AthkarPage() {
 
   return (
     <main className="min-h-screen pt-24 pb-16">
-      <div className="max-w-7xl mx-auto px-4 md:px-6">
+      <div className="max-w-[1440px] mx-auto px-4 md:px-8">
         
         {/* Header */}
         <div className="text-center mb-12 py-8">

@@ -5,7 +5,8 @@ import SurahView from "@/components/SurahView";
 import SurahHeader from "@/components/SurahHeader";
 import VerseHighlighter from "./VerseHighlighter";
 
-export async function generateMetadata({ params }: any) {
+export async function generateMetadata(props: any) {
+  const params = await props.params;
   const surahMeta: any = await fetch(
     `https://api.quran.com/api/v4/chapters/${params.surah}?language=en`
   ).then((res) => res.json());
@@ -16,7 +17,8 @@ export async function generateMetadata({ params }: any) {
   };
 }
 
-export default async function Page({ params }: any) {
+export default async function Page(props: any) {
+  const params = await props.params;
   const [surah, versesInfo, surahMeta, translationsData] = await Promise.all([
     fetch(
       `https://api.quran.com/api/v4/quran/verses/uthmani?chapter_number=${params.surah}`,

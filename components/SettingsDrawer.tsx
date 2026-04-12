@@ -1,249 +1,225 @@
 "use client";
 
 import { useSettings } from "@/context/SettingsContext";
-import { Fragment, useState } from "react";
-import { Dialog, Transition } from "@headlessui/react";
+import { Dialog, DialogPanel, DialogTitle, Transition, TransitionChild } from "@headlessui/react";
+import { useReadingNav } from "./Navbar";
 
 export default function SettingsDrawer() {
-  const { fontSize, setFontSize, readingMode, setReadingMode } = useSettings();
-  const [isOpen, setIsOpen] = useState(false);
+  const { fontSize, setFontSize, readingMode, setReadingMode, showTranslation, setShowTranslation } = useSettings();
+  const readingNav = useReadingNav();
+  const isOpen = readingNav?.settingsOpen ?? false;
+  const setIsOpen = readingNav?.setSettingsOpen ?? (() => {});
 
   const fontSizePresets = [
-    { label: "Small", value: 22 },
-    { label: "Medium", value: 28 },
-    { label: "Large", value: 36 },
-    { label: "X-Large", value: 44 },
+    { label: "S", value: 22 },
+    { label: "M", value: 28 },
+    { label: "L", value: 36 },
+    { label: "XL", value: 44 },
   ];
 
   return (
     <>
-      {/* Trigger Button */}
-      <button 
+      {/* Trigger */}
+      <button
         onClick={() => setIsOpen(true)}
-        className="fixed bottom-6 left-6 z-40 p-3 rounded-full shadow-glass
-          bg-gray-900/80 backdrop-blur-sm border border-white/[0.06]
-          text-gray-400 hover:text-emerald-400 
-          hover:border-emerald-500/30 hover:shadow-glow-sm
-          transition-all duration-300 btn-press group"
-        title="Appearance Settings"
+        className="hidden md:flex fixed bottom-6 left-6 z-40
+          w-10 h-10 rounded-full items-center justify-center
+          bg-[hsl(240,5%,10%)] border border-white/[0.06]
+          text-gray-400 hover:text-emerald-400 hover:border-emerald-500/20
+          transition-all duration-200 shadow-lg shadow-black/20"
+        title="Reading settings"
       >
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" 
-          className="w-6 h-6 group-hover:rotate-90 transition-transform duration-500">
-          <path strokeLinecap="round" strokeLinejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.324.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 011.37.49l1.296 2.247a1.125 1.125 0 01-.26 1.431l-1.003.827c-.293.24-.438.613-.431.992a6.759 6.759 0 010 .255c-.007.378.138.75.43.99l1.005.828c.424.35.534.954.26 1.43l-1.298 2.247a1.125 1.125 0 01-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.57 6.57 0 01-.22.128c-.331.183-.581.495-.644.869l-.213 1.28c-.09.543-.56.941-1.11.941h-2.594c-.55 0-1.02-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 01-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 01-1.369-.49l-1.297-2.247a1.125 1.125 0 01.26-1.431l1.004-.827c.292-.24.437-.613.43-.992a6.932 6.932 0 010-.255c.007-.378-.138-.75-.43-.99l-1.004-.828a1.125 1.125 0 01-.26-1.43l1.297-2.247a1.125 1.125 0 011.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.087.22-.128.332-.183.582-.495.644-.869l.214-1.281z" />
-          <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+          <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 11-3 0m3 0a1.5 1.5 0 10-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-9.75 0h9.75" />
         </svg>
       </button>
 
-      {/* Drawer */}
-      <Transition.Root show={isOpen} as={Fragment}>
+      <Transition show={isOpen}>
         <Dialog as="div" className="relative z-50" onClose={setIsOpen}>
-          <Transition.Child
-            as={Fragment}
-            enter="ease-out duration-300"
+          <TransitionChild
+                       enter="ease-out duration-200"
             enterFrom="opacity-0"
             enterTo="opacity-100"
-            leave="ease-in duration-200"
+            leave="ease-in duration-150"
             leaveFrom="opacity-100"
             leaveTo="opacity-0"
           >
-            <div className="fixed inset-0 bg-gray-950/80 backdrop-blur-sm transition-opacity" />
-          </Transition.Child>
+            <div className="fixed inset-0 bg-black/50 backdrop-blur-sm" />
+          </TransitionChild>
 
           <div className="fixed inset-0 overflow-hidden">
             <div className="absolute inset-0 overflow-hidden">
-              <div className="pointer-events-none fixed inset-y-0 right-0 flex max-w-full pl-10">
-                <Transition.Child
-                  as={Fragment}
-                  enter="transform transition ease-out duration-500"
+              <div className="pointer-events-none fixed inset-y-0 right-0 flex max-w-full pl-16">
+                <TransitionChild
+                                   enter="transform transition ease-out duration-300"
                   enterFrom="translate-x-full"
                   enterTo="translate-x-0"
-                  leave="transform transition ease-in duration-300"
+                  leave="transform transition ease-in duration-200"
                   leaveFrom="translate-x-0"
                   leaveTo="translate-x-full"
                 >
-                  <Dialog.Panel className="pointer-events-auto w-screen max-w-md">
-                    <div className="flex h-full flex-col overflow-y-auto 
-                      bg-gray-900/95 backdrop-blur-xl shadow-2xl 
-                      border-l border-white/[0.06]">
-                      
+                  <DialogPanel className="pointer-events-auto w-screen max-w-xs">
+                    <div className="flex h-full flex-col bg-[hsl(240,5%,9%)] border-l border-white/[0.04]">
                       {/* Header */}
-                      <div className="px-6 py-5 border-b border-white/[0.06]">
-                        <div className="flex items-center justify-between">
-                          <Dialog.Title className="text-lg font-semibold text-white font-english">
-                            Appearance
-                          </Dialog.Title>
-                          <button
-                            type="button"
-                            className="rounded-lg p-2 text-gray-400 hover:text-white 
-                              hover:bg-white/5 transition-colors"
-                            onClick={() => setIsOpen(false)}
-                          >
-                            <span className="sr-only">Close panel</span>
-                            <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
-                              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-                            </svg>
-                          </button>
-                        </div>
+                      <div className="px-5 py-4 border-b border-white/[0.04] flex items-center justify-between">
+                        <DialogTitle className="text-sm font-medium text-white font-english">
+                          Settings
+                        </DialogTitle>
+                        <button
+                          onClick={() => setIsOpen(false)}
+                          className="w-7 h-7 rounded-md flex items-center justify-center
+                            text-gray-500 hover:text-white hover:bg-white/[0.04] transition-colors"
+                        >
+                          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                          </svg>
+                        </button>
                       </div>
-                      
-                      {/* Content */}
-                      <div className="flex-1 px-6 py-8 space-y-8">
-                        
-                        {/* Font Size Section */}
-                        <div className="space-y-4">
+
+                      <div className="flex-1 px-5 py-6 space-y-8">
+                        {/* Font Size */}
+                        <div className="space-y-3">
                           <div className="flex items-center justify-between">
-                            <h3 className="text-sm font-medium text-gray-300 font-english">
-                              Arabic Font Size
+                            <h3 className="text-xs font-medium text-gray-400 font-english uppercase tracking-wider">
+                              Font Size
                             </h3>
-                            <span className="text-xs text-emerald-400 font-english bg-emerald-500/10 px-2 py-1 rounded">
+                            <span className="text-[11px] text-emerald-500 font-english">
                               {fontSize}px
                             </span>
                           </div>
-                          
-                          {/* Preset Buttons */}
-                          <div className="grid grid-cols-4 gap-2">
+
+                          <div className="flex gap-1.5">
                             {fontSizePresets.map((preset) => (
                               <button
                                 key={preset.value}
                                 onClick={() => setFontSize(preset.value)}
-                                className={`px-3 py-2 rounded-lg text-xs font-english transition-all duration-200
-                                  ${fontSize === preset.value 
-                                    ? "bg-emerald-500 text-white" 
-                                    : "bg-gray-800/50 text-gray-400 hover:bg-gray-800 hover:text-white border border-white/5"
+                                className={`flex-1 py-1.5 rounded-md text-xs font-english transition-all duration-200
+                                  ${fontSize === preset.value
+                                    ? "bg-emerald-500 text-gray-950 font-medium"
+                                    : "bg-white/[0.03] text-gray-500 hover:bg-white/[0.06] hover:text-gray-300 border border-white/[0.04]"
                                   }`}
                               >
                                 {preset.label}
                               </button>
                             ))}
                           </div>
-                          
-                          {/* Slider */}
-                          <div className="flex items-center gap-4 pt-2">
-                            <span className="text-sm text-gray-500 font-Scheherazade_New">أ</span>
-                            <input 
-                              type="range" 
-                              min="18" 
-                              max="60" 
-                              value={fontSize} 
-                              onChange={(e) => setFontSize(Number(e.target.value))}
-                              className="w-full h-2 bg-gray-800 rounded-lg appearance-none cursor-pointer 
-                                accent-emerald-500 
-                                [&::-webkit-slider-thumb]:appearance-none 
-                                [&::-webkit-slider-thumb]:w-4 
-                                [&::-webkit-slider-thumb]:h-4 
-                                [&::-webkit-slider-thumb]:bg-emerald-500 
-                                [&::-webkit-slider-thumb]:rounded-full 
-                                [&::-webkit-slider-thumb]:shadow-glow-sm
-                                [&::-webkit-slider-thumb]:cursor-pointer"
-                            />
-                            <span className="text-2xl text-gray-300 font-Scheherazade_New">أ</span>
-                          </div>
-                          
+
+                          <input
+                            type="range"
+                            min="18"
+                            max="60"
+                            value={fontSize}
+                            onChange={(e) => setFontSize(Number(e.target.value))}
+                            className="w-full h-1 bg-white/[0.06] rounded-full appearance-none cursor-pointer
+                              accent-emerald-500
+                              [&::-webkit-slider-thumb]:appearance-none
+                              [&::-webkit-slider-thumb]:w-3
+                              [&::-webkit-slider-thumb]:h-3
+                              [&::-webkit-slider-thumb]:bg-emerald-500
+                              [&::-webkit-slider-thumb]:rounded-full
+                              [&::-webkit-slider-thumb]:cursor-pointer"
+                          />
+
                           {/* Preview */}
-                          <div className="glass-card p-6 text-center">
-                            <p className="text-gray-500 text-xs font-english mb-3 uppercase tracking-wider">
-                              Preview
-                            </p>
-                            <p 
-                              className="font-Scheherazade_New text-gray-200 leading-relaxed"
-                              style={{ fontSize: `${fontSize}px`, lineHeight: '2.4' }}
+                          <div className="p-4 rounded-xl bg-white/[0.02] border border-white/[0.04] text-center">
+                            <p
+                              dir="rtl"
+                              className="font-Scheherazade_New text-gray-300"
+                              style={{ fontSize: `${fontSize}px`, lineHeight: "2.2" }}
                             >
-                              بِسْمِ ٱللَّهِ ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ
+                              بِسْمِ ٱللَّهِ
                             </p>
                           </div>
                         </div>
 
-                        {/* Reading Mode Section */}
-                        <div className="space-y-4">
-                          <h3 className="text-sm font-medium text-gray-300 font-english">
-                            Reading Mode
+                        {/* Reading Mode */}
+                        <div className="space-y-3">
+                          <h3 className="text-xs font-medium text-gray-400 font-english uppercase tracking-wider">
+                            Layout
                           </h3>
-                          
-                          <div className="grid grid-cols-2 gap-3">
-                            {/* Flow Mode */}
+
+                          <div className="grid grid-cols-2 gap-2">
                             <button
                               onClick={() => setReadingMode("flow")}
-                              className={`relative p-4 rounded-xl border transition-all duration-200 text-left
-                                ${readingMode === "flow" 
-                                  ? "bg-emerald-500/10 border-emerald-500/50" 
-                                  : "bg-gray-800/30 border-white/5 hover:border-white/10"
+                              className={`p-3 rounded-xl border transition-all duration-200 text-center
+                                ${readingMode === "flow"
+                                  ? "bg-emerald-500/8 border-emerald-500/25"
+                                  : "bg-white/[0.02] border-white/[0.04] hover:border-white/[0.08]"
                                 }`}
                             >
-                              {/* Icon */}
-                              <div className="flex justify-center mb-3">
-                                <div className={`w-12 h-16 rounded border-2 flex items-center justify-center
-                                  ${readingMode === "flow" ? "border-emerald-500" : "border-gray-600"}`}>
-                                  <div className="space-y-1 px-1">
-                                    <div className={`h-0.5 w-full rounded ${readingMode === "flow" ? "bg-emerald-500" : "bg-gray-600"}`} />
-                                    <div className={`h-0.5 w-3/4 rounded ${readingMode === "flow" ? "bg-emerald-500" : "bg-gray-600"}`} />
-                                    <div className={`h-0.5 w-full rounded ${readingMode === "flow" ? "bg-emerald-500" : "bg-gray-600"}`} />
-                                    <div className={`h-0.5 w-1/2 rounded ${readingMode === "flow" ? "bg-emerald-500" : "bg-gray-600"}`} />
-                                  </div>
+                              <div className="flex justify-center mb-2">
+                                <div className={`w-8 h-10 rounded border flex flex-col items-center justify-center gap-0.5 p-1
+                                  ${readingMode === "flow" ? "border-emerald-500/50" : "border-gray-700"}`}>
+                                  <div className={`h-px w-full rounded ${readingMode === "flow" ? "bg-emerald-500/60" : "bg-gray-700"}`} />
+                                  <div className={`h-px w-3/4 rounded ${readingMode === "flow" ? "bg-emerald-500/60" : "bg-gray-700"}`} />
+                                  <div className={`h-px w-full rounded ${readingMode === "flow" ? "bg-emerald-500/60" : "bg-gray-700"}`} />
+                                  <div className={`h-px w-1/2 rounded ${readingMode === "flow" ? "bg-emerald-500/60" : "bg-gray-700"}`} />
                                 </div>
                               </div>
-                              <p className={`text-xs font-english text-center
-                                ${readingMode === "flow" ? "text-emerald-400" : "text-gray-400"}`}>
-                                Continuous
+                              <p className={`text-[11px] font-english
+                                ${readingMode === "flow" ? "text-emerald-400" : "text-gray-500"}`}>
+                                Flow
                               </p>
                             </button>
 
-                            {/* Spread Mode */}
                             <button
                               onClick={() => setReadingMode("spread")}
-                              className={`relative p-4 rounded-xl border transition-all duration-200 text-left
-                                ${readingMode === "spread" 
-                                  ? "bg-emerald-500/10 border-emerald-500/50" 
-                                  : "bg-gray-800/30 border-white/5 hover:border-white/10"
+                              className={`p-3 rounded-xl border transition-all duration-200 text-center
+                                ${readingMode === "spread"
+                                  ? "bg-emerald-500/8 border-emerald-500/25"
+                                  : "bg-white/[0.02] border-white/[0.04] hover:border-white/[0.08]"
                                 }`}
                             >
-                              {/* Icon - Two pages */}
-                              <div className="flex justify-center gap-1 mb-3">
-                                <div className={`w-6 h-16 rounded-l border-2 border-r-0
-                                  ${readingMode === "spread" ? "border-emerald-500" : "border-gray-600"}`}>
-                                  <div className="space-y-1 p-1 pt-2">
-                                    <div className={`h-0.5 w-full rounded ${readingMode === "spread" ? "bg-emerald-500" : "bg-gray-600"}`} />
-                                    <div className={`h-0.5 w-2/3 rounded ${readingMode === "spread" ? "bg-emerald-500" : "bg-gray-600"}`} />
-                                  </div>
+                              <div className="flex justify-center gap-0.5 mb-2">
+                                <div className={`w-4 h-10 rounded-l border border-r-0 p-0.5 flex flex-col gap-0.5
+                                  ${readingMode === "spread" ? "border-emerald-500/50" : "border-gray-700"}`}>
+                                  <div className={`h-px w-full rounded ${readingMode === "spread" ? "bg-emerald-500/60" : "bg-gray-700"}`} />
+                                  <div className={`h-px w-2/3 rounded ${readingMode === "spread" ? "bg-emerald-500/60" : "bg-gray-700"}`} />
                                 </div>
-                                <div className={`w-6 h-16 rounded-r border-2 border-l-0
-                                  ${readingMode === "spread" ? "border-emerald-500" : "border-gray-600"}`}>
-                                  <div className="space-y-1 p-1 pt-2">
-                                    <div className={`h-0.5 w-full rounded ${readingMode === "spread" ? "bg-emerald-500" : "bg-gray-600"}`} />
-                                    <div className={`h-0.5 w-2/3 rounded ${readingMode === "spread" ? "bg-emerald-500" : "bg-gray-600"}`} />
-                                  </div>
+                                <div className={`w-4 h-10 rounded-r border border-l-0 p-0.5 flex flex-col gap-0.5
+                                  ${readingMode === "spread" ? "border-emerald-500/50" : "border-gray-700"}`}>
+                                  <div className={`h-px w-full rounded ${readingMode === "spread" ? "bg-emerald-500/60" : "bg-gray-700"}`} />
+                                  <div className={`h-px w-2/3 rounded ${readingMode === "spread" ? "bg-emerald-500/60" : "bg-gray-700"}`} />
                                 </div>
                               </div>
-                              <p className={`text-xs font-english text-center
-                                ${readingMode === "spread" ? "text-emerald-400" : "text-gray-400"}`}>
-                                Book Spread
+                              <p className={`text-[11px] font-english
+                                ${readingMode === "spread" ? "text-emerald-400" : "text-gray-500"}`}>
+                                Spread
                               </p>
                             </button>
                           </div>
-                          
-                          <p className="text-[10px] text-gray-600 font-english">
-                            {readingMode === "spread" 
-                              ? "View two Quran pages side by side like a physical Mushaf" 
-                              : "Read verses in a continuous scrolling flow"
-                            }
-                          </p>
                         </div>
 
-                        {/* Info */}
-                        <div className="p-4 rounded-xl bg-emerald-500/5 border border-emerald-500/10">
-                          <p className="text-xs text-gray-500 font-english leading-relaxed">
-                            Your preferences are saved automatically.
-                          </p>
+                        {/* Translation Toggle */}
+                        <div className="space-y-3">
+                          <h3 className="text-xs font-medium text-gray-400 font-english uppercase tracking-wider">
+                            Translation
+                          </h3>
+                          <button
+                            onClick={() => setShowTranslation(!showTranslation)}
+                            className="w-full flex items-center justify-between p-3 rounded-xl
+                              bg-white/[0.02] border border-white/[0.04] transition-colors"
+                          >
+                            <div>
+                              <p className="text-sm text-gray-300 font-english text-left">English Translation</p>
+                              <p className="text-[11px] text-gray-600 font-english text-left">Saheeh International</p>
+                            </div>
+                            <div className={`w-9 h-5 rounded-full transition-colors duration-200 flex items-center px-0.5
+                              ${showTranslation ? "bg-emerald-500" : "bg-white/[0.08]"}`}>
+                              <div className={`w-4 h-4 rounded-full bg-white shadow-sm transition-transform duration-200
+                                ${showTranslation ? "translate-x-4" : "translate-x-0"}`} />
+                            </div>
+                          </button>
                         </div>
-                        
                       </div>
                     </div>
-                  </Dialog.Panel>
-                </Transition.Child>
+                  </DialogPanel>
+                </TransitionChild>
               </div>
             </div>
           </div>
         </Dialog>
-      </Transition.Root>
+      </Transition>
     </>
   );
 }

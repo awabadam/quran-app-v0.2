@@ -1,7 +1,7 @@
 "use client";
 
-import { Fragment, useState } from "react";
-import { Combobox, Dialog, Transition } from "@headlessui/react";
+import { useState } from "react";
+import { Combobox, ComboboxInput, ComboboxOption, ComboboxOptions, Dialog, DialogPanel, Transition, TransitionChild } from "@headlessui/react";
 import { surahs } from "@/lib/surahs";
 import { useRouter } from "next/navigation";
 import { useSettings } from "@/context/SettingsContext";
@@ -23,11 +23,10 @@ export default function CommandPalette() {
         });
 
   return (
-    <Transition.Root show={isSearchOpen} as={Fragment}>
+    <Transition show={isSearchOpen}>
       <Dialog as="div" className="relative z-50" onClose={setIsSearchOpen}>
-        <Transition.Child
-          as={Fragment}
-          enter="ease-out duration-200"
+        <TransitionChild
+                   enter="ease-out duration-200"
           enterFrom="opacity-0"
           enterTo="opacity-100"
           leave="ease-in duration-150"
@@ -35,19 +34,18 @@ export default function CommandPalette() {
           leaveTo="opacity-0"
         >
           <div className="fixed inset-0 bg-black/60 backdrop-blur-sm" />
-        </Transition.Child>
+        </TransitionChild>
 
         <div className="fixed inset-0 z-10 overflow-y-auto p-4 sm:p-6 md:p-20">
-          <Transition.Child
-            as={Fragment}
-            enter="ease-out duration-200"
+          <TransitionChild
+                       enter="ease-out duration-200"
             enterFrom="opacity-0 scale-95"
             enterTo="opacity-100 scale-100"
             leave="ease-in duration-150"
             leaveFrom="opacity-100 scale-100"
             leaveTo="opacity-0 scale-95"
           >
-            <Dialog.Panel className="mx-auto max-w-lg transform overflow-hidden rounded-2xl
+            <DialogPanel className="mx-auto max-w-lg transform overflow-hidden rounded-2xl
               bg-[hsl(240,5%,10%)] border border-white/[0.06] shadow-2xl transition-all">
               <Combobox
                 onChange={(surah: any) => {
@@ -63,7 +61,7 @@ export default function CommandPalette() {
                       <path fillRule="evenodd" d="M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.452 4.391l3.328 3.329a.75.75 0 11-1.06 1.06l-3.329-3.328A7 7 0 012 9z" clipRule="evenodd" />
                     </svg>
                   </div>
-                  <Combobox.Input
+                  <ComboboxInput
                     className="h-12 w-full border-0 bg-transparent pl-11 pr-4 text-gray-100
                       placeholder:text-gray-600 focus:ring-0 text-sm font-english outline-none"
                     placeholder="Search surahs..."
@@ -73,9 +71,9 @@ export default function CommandPalette() {
                 </div>
 
                 {filteredSurahs.length > 0 && (
-                  <Combobox.Options static className="max-h-80 overflow-y-auto p-2">
+                  <ComboboxOptions static className="max-h-80 overflow-y-auto p-2">
                     {filteredSurahs.map((surah) => (
-                      <Combobox.Option
+                      <ComboboxOption
                         key={surah.id}
                         value={surah}
                         className={({ active }) =>
@@ -94,9 +92,9 @@ export default function CommandPalette() {
                             <span className="text-xs text-gray-600 font-Scheherazade_New text-left">{surah.arabic}</span>
                           </div>
                         </div>
-                      </Combobox.Option>
+                      </ComboboxOption>
                     ))}
-                  </Combobox.Options>
+                  </ComboboxOptions>
                 )}
 
                 {query !== "" && filteredSurahs.length === 0 && (
@@ -134,10 +132,10 @@ export default function CommandPalette() {
                   </div>
                 )}
               </Combobox>
-            </Dialog.Panel>
-          </Transition.Child>
+            </DialogPanel>
+          </TransitionChild>
         </div>
       </Dialog>
-    </Transition.Root>
+    </Transition>
   );
 }

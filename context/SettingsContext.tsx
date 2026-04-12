@@ -12,25 +12,29 @@ type SettingsContextType = {
   setIsSearchOpen: (isOpen: boolean) => void;
   readingMode: ReadingMode;
   setReadingMode: (mode: ReadingMode) => void;
+  showTranslation: boolean;
+  setShowTranslation: (show: boolean) => void;
 };
 
 const SettingsContext = createContext<SettingsContextType | undefined>(undefined);
 
 export function SettingsProvider({ children }: { children: React.ReactNode }) {
-  const [fontSize, setFontSize] = useState(24);
+  const [fontSize, setFontSize] = useState(28);
   const [fontFace, setFontFace] = useState("Scheherazade_New");
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [readingMode, setReadingMode] = useState<ReadingMode>("flow");
+  const [showTranslation, setShowTranslation] = useState(true);
 
-  // Load from local storage
   useEffect(() => {
     const savedSize = localStorage.getItem("quran-font-size");
     if (savedSize) setFontSize(Number(savedSize));
-    
+
     const savedMode = localStorage.getItem("quran-reading-mode") as ReadingMode;
     if (savedMode) setReadingMode(savedMode);
-    
-    // Listen for Ctrl+K
+
+    const savedTranslation = localStorage.getItem("quran-show-translation");
+    if (savedTranslation !== null) setShowTranslation(savedTranslation === "true");
+
     const handleKeyDown = (e: KeyboardEvent) => {
       if ((e.ctrlKey || e.metaKey) && e.key === "k") {
         e.preventDefault();
@@ -51,17 +55,24 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
     localStorage.setItem("quran-reading-mode", mode);
   };
 
+  const handleSetShowTranslation = (show: boolean) => {
+    setShowTranslation(show);
+    localStorage.setItem("quran-show-translation", String(show));
+  };
+
   return (
     <SettingsContext.Provider
-      value={{ 
-        fontSize, 
-        setFontSize: handleSetFontSize, 
-        fontFace, 
+      value={{
+        fontSize,
+        setFontSize: handleSetFontSize,
+        fontFace,
         setFontFace,
         isSearchOpen,
         setIsSearchOpen,
         readingMode,
-        setReadingMode: handleSetReadingMode
+        setReadingMode: handleSetReadingMode,
+        showTranslation,
+        setShowTranslation: handleSetShowTranslation,
       }}
     >
       {children}
