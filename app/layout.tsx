@@ -1,9 +1,10 @@
 import "./globals.css";
 import type { Metadata } from "next";
-import Navbar from "@/components/Navbar";
+import Navbar, { ReadingNavProvider } from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Scheherazade_New, Inter } from "next/font/google";
 import { SettingsProvider } from "@/context/SettingsContext";
+import { BookmarkProvider } from "@/context/BookmarkContext";
 import CommandPalette from "@/components/CommandPalette";
 
 const scheherazade = Scheherazade_New({
@@ -61,19 +62,16 @@ export default function RootLayout({
         `}
       >
         <SettingsProvider>
-          {/* Command Palette - Global Search */}
-          <CommandPalette />
-          
-          {/* Navigation */}
-          <Navbar />
-          
-          {/* Main Content */}
-          <div className="flex-1">
-            {children}
-          </div>
-          
-          {/* Footer */}
-          <Footer />
+          <BookmarkProvider>
+            <ReadingNavProvider>
+              <CommandPalette />
+              <Navbar />
+              <div className="flex-1">
+                {children}
+              </div>
+              <Footer />
+            </ReadingNavProvider>
+          </BookmarkProvider>
         </SettingsProvider>
       </body>
     </html>
