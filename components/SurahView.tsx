@@ -143,7 +143,7 @@ function MushafPage({
 
   if (!pageData || pageData.loading) {
     return (
-      <div className={`min-h-[60vh] bg-[hsl(240,4%,8%)] border border-white/[0.04] flex items-center justify-center ${roundedClass}`}>
+      <div className={`min-h-0 bg-[hsl(240,4%,8%)] border border-white/[0.04] flex items-center justify-center ${roundedClass}`}>
         <div className="flex flex-col items-center gap-3">
           <div className="w-5 h-5 border-2 border-emerald-500/30 border-t-emerald-500 rounded-full animate-spin" />
           <span className="text-[11px] text-gray-600 font-english">Loading page...</span>
@@ -156,7 +156,7 @@ function MushafPage({
   const allLineNumbers = Array.from({ length: 15 }, (_, i) => i + 1);
 
   return (
-    <div className={`min-h-[60vh] bg-[hsl(240,4%,8%)] border border-white/[0.04] ${borderClass} flex flex-col py-5 px-5 lg:py-7 lg:px-9 ${roundedClass}`}>
+    <div className={`min-h-0 bg-[hsl(240,4%,8%)] border border-white/[0.04] ${borderClass} flex flex-col py-5 px-5 lg:py-7 lg:px-9 ${roundedClass}`}>
       {/* Page number header */}
       <div className="flex items-center justify-center mb-3 pb-2.5 flex-shrink-0">
         <div className="flex items-center gap-3">
@@ -169,7 +169,7 @@ function MushafPage({
       {/* Content — rendered as continuous inline text, same as FlowView */}
       <div className="flex-1 font-Scheherazade_New text-gray-100" dir="rtl"
         style={{
-          fontSize: `${fontSize}px`,
+          fontSize: `clamp(14px, 2.2vh, ${fontSize}px)`,
           lineHeight: "2.8",
           wordSpacing: "0.05em",
           textAlign: "justify",
@@ -326,7 +326,7 @@ function SpreadView({
           {leftPageNum ? (
             <MushafPage pageData={leftPage} position="left" fontSize={fontSize} />
           ) : (
-            <div className="min-h-[60vh] rounded-r-2xl border border-white/[0.03] border-dashed bg-white/[0.01] hidden lg:block" />
+            <div className="min-h-0 rounded-r-2xl border border-white/[0.03] border-dashed bg-white/[0.01] hidden lg:block" />
           )}
         </motion.div>
       </AnimatePresence>
