@@ -97,13 +97,13 @@ export default function CommandPalette() {
                   </ComboboxOptions>
                 )}
 
-                {query !== "" && filteredSurahs.length === 0 && (
+                {query !== "" && (
                   <button
                     onClick={() => {
                       setIsSearchOpen(false);
                       router.push(`/search?q=${encodeURIComponent(query)}`);
                     }}
-                    className="w-full p-4 text-left hover:bg-white/[0.04] transition-colors"
+                    className="w-full p-4 text-left hover:bg-white/[0.04] transition-colors border-t border-white/[0.04]"
                   >
                     <div className="flex items-center gap-3">
                       <div className="flex h-8 w-8 flex-none items-center justify-center rounded-lg
@@ -118,7 +118,7 @@ export default function CommandPalette() {
                           Search Quran for &ldquo;{query}&rdquo;
                         </p>
                         <p className="text-xs text-gray-600 font-english">
-                          Search in English translations
+                          Search verses and translations
                         </p>
                       </div>
                     </div>

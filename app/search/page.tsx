@@ -22,11 +22,14 @@ interface SearchResponse {
   };
 }
 
+const hasArabic = (text: string) => /[\u0600-\u06FF]/.test(text);
+
 async function searchQuran(query: string, page: number): Promise<SearchResponse | null> {
   if (!query) return null;
 
+  const language = hasArabic(query) ? "ar" : "en";
   const res = await fetch(
-    `https://api.quran.com/api/v4/search?q=${encodeURIComponent(query)}&language=en&size=10&page=${page}`,
+    `https://api.quran.com/api/v4/search?q=${encodeURIComponent(query)}&language=${language}&size=10&page=${page}`,
     { next: { revalidate: 3600 } }
   );
 
