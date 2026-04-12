@@ -43,9 +43,9 @@ export default function CommandPalette() {
 
     setSearching(true);
     try {
-      const language = hasArabic(q) ? "ar" : "en";
+      const langParam = hasArabic(q) ? "" : "&language=en";
       const res = await fetch(
-        `https://api.quran.com/api/v4/search?q=${encodeURIComponent(q)}&language=${language}&size=5&page=1`
+        `https://api.quran.com/api/v4/search?q=${encodeURIComponent(q)}${langParam}&size=5&page=1`
       );
       if (!res.ok) { setVerseResults([]); return; }
       const text = await res.text();
