@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quran App — Offline</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #0f0f11;
+      color: #e5e5e5;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 2rem;
+    }
+    .container { max-width: 400px; }
+    .icon { font-size: 3rem; margin-bottom: 1.5rem; opacity: 0.6; }
+    h1 { font-size: 1.25rem; margin-bottom: 0.5rem; color: #fff; }
+    p { font-size: 0.875rem; color: #737373; line-height: 1.6; }
+    .retry {
+      display: inline-block;
+      margin-top: 1.5rem;
+      padding: 0.5rem 1.5rem;
+      border-radius: 9999px;
+      background: rgba(16, 185, 129, 0.1);
+      border: 1px solid rgba(16, 185, 129, 0.2);
+      color: #10b981;
+      font-size: 0.875rem;
+      cursor: pointer;
+      text-decoration: none;
+    }
+    .retry:hover { background: rgba(16, 185, 129, 0.2); }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="icon">&#9778;</div>
+    <h1>You're offline</h1>
+    <p>Please check your internet connection. Previously visited pages may still be available.</p>
+    <a href="/" class="retry">Try again</a>
+  </div>
+</body>
+</html>

@@ -46,6 +46,16 @@ export const metadata: Metadata = {
     index: true,
     follow: true,
   },
+  themeColor: "#10b981",
+  manifest: "/manifest.json",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "black-translucent",
+    title: "Quran App",
+  },
+  other: {
+    "mobile-web-app-capable": "yes",
+  },
 };
 
 export default function RootLayout({
