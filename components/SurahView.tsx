@@ -179,7 +179,7 @@ function MushafPage({
         }}>
         {showBismillah && (
           <div className="flex justify-center pb-4 mb-2">
-            <img src="/Bismillah.svg" alt="Bismillah" className="h-10 opacity-80" />
+            <img src="/Bismillah.svg" alt="Bismillah" className="h-10 invert" />
           </div>
         )}
         {allLineNumbers.map((lineNum) => {
