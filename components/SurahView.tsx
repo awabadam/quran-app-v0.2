@@ -182,10 +182,10 @@ function MushafPage({
             >
               {words.map((word, wi) => {
                 if (word.char_type_name === "end") {
-                  const verseNum = word.verse_key?.split(":")[1];
+                  const verseNum = parseInt(word.verse_key?.split(":")[1] || "0");
                   return (
-                    <span key={`${word.id}-${wi}`} className="text-emerald-400/80" style={{ fontSize: "0.75em" }}>
-                      {" "}﴿{verseNum}﴾{" "}
+                    <span key={`${word.id}-${wi}`}>
+                      {" "}<VerseCount count={verseNum} />{" "}
                     </span>
                   );
                 }
