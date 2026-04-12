@@ -1,5 +1,4 @@
 import Hero from "@/components/Hero";
-import SectionDivider from "@/components/SectionDivider";
 import FeatureCards from "@/components/FeatureCards";
 import SurahBrowser from "@/components/SurahBrowser";
 
@@ -23,19 +22,64 @@ export default async function Home() {
 
   const juzData = await juzRes.json();
 
-  // Get surah name for the daily verse
   const surahName = dailyVerse
     ? chaptersData.chapters?.find((ch: any) => ch.id === dailyVerse.chapter_id)?.name_simple
     : undefined;
 
   return (
-    <main className="min-h-screen w-full">
-      <Hero dailyVerse={dailyVerse} surahName={surahName} />
+    <main className="min-h-screen w-full pt-16">
+      {/* Top section: Continue Reading + Daily Verse side by side */}
+      <section className="w-full max-w-[1440px] mx-auto px-4 md:px-8 py-6 md:py-10">
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-4 md:gap-6">
+          {/* Left: Continue Reading + Quick Actions */}
+          <div className="lg:col-span-2 flex flex-col gap-4">
+            <FeatureCards />
 
-      <SectionDivider />
+            {/* Quick links */}
+            <div className="grid grid-cols-2 gap-3">
+              <a
+                href="/bookmarks"
+                className="flex items-center gap-3 p-3.5 rounded-xl
+                  bg-white/[0.03] border border-white/[0.05]
+                  hover:bg-white/[0.05] hover:border-emerald-500/20
+                  transition-all duration-200 group"
+              >
+                <div className="w-9 h-9 rounded-lg bg-emerald-500/10 border border-emerald-500/15
+                  flex items-center justify-center group-hover:bg-emerald-500/15 transition-colors">
+                  <svg className="w-4 h-4 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                    <path strokeLinecap="round" strokeLinejoin="round"
+                      d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0111.186 0z" />
+                  </svg>
+                </div>
+                <span className="text-sm text-gray-400 font-english group-hover:text-white transition-colors">Bookmarks</span>
+              </a>
+              <a
+                href="/athkar"
+                className="flex items-center gap-3 p-3.5 rounded-xl
+                  bg-white/[0.03] border border-white/[0.05]
+                  hover:bg-white/[0.05] hover:border-emerald-500/20
+                  transition-all duration-200 group"
+              >
+                <div className="w-9 h-9 rounded-lg bg-emerald-500/10 border border-emerald-500/15
+                  flex items-center justify-center group-hover:bg-emerald-500/15 transition-colors">
+                  <svg className="w-4 h-4 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                  </svg>
+                </div>
+                <span className="text-sm text-gray-400 font-english group-hover:text-white transition-colors">Athkar</span>
+              </a>
+            </div>
+          </div>
 
-      <section id="surahs" className="w-full max-w-[1440px] mx-auto px-4 md:px-8 py-12 md:py-20">
-        <FeatureCards />
+          {/* Right: Daily Verse */}
+          <div className="lg:col-span-3">
+            <Hero dailyVerse={dailyVerse} surahName={surahName} />
+          </div>
+        </div>
+      </section>
+
+      {/* Surah/Juz Browser — main content */}
+      <section id="surahs" className="w-full max-w-[1440px] mx-auto px-4 md:px-8 pb-12 md:pb-20">
         <SurahBrowser chapters={chaptersData.chapters} juzs={juzData.juzs} />
       </section>
     </main>
