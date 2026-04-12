@@ -36,7 +36,7 @@ export default function VerseCount({ count, surahId, surahName, arabicName, vers
           ? "bg-emerald-500 text-gray-950"
           : "text-emerald-400/70"
         }`}
-      style={{ fontSize: "1.1em", padding: bookmarked ? "0 0.15em" : undefined }}
+      style={{ fontSize: "1.1em", padding: "0 0.15em" }}
       onClick={canBookmark ? handleClick : undefined}
       title={canBookmark ? (bookmarked ? "Remove bookmark" : "Bookmark this verse") : undefined}
     >
