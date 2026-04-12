@@ -1,8 +1,9 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState, useEffect, createContext, useContext } from "react";
+import { useState, useEffect, createContext, useContext, useMemo } from "react";
 import { useSettings } from "@/context/SettingsContext";
+import { surahs } from "@/lib/surahs";
 
 // Context so SideMenu and SettingsDrawer can be opened from the navbar
 export const ReadingNavContext = createContext<{
@@ -34,6 +35,11 @@ export default function Navbar() {
 
   // Detect if we're on a surah reading page
   const isSurahPage = /^\/\d+$/.test(pathname);
+  const currentSurah = useMemo(() => {
+    if (!isSurahPage) return null;
+    const id = parseInt(pathname.slice(1));
+    return surahs.find(s => s.id === id) || null;
+  }, [isSurahPage, pathname]);
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 10);
@@ -85,15 +91,30 @@ export default function Navbar() {
         <div className="max-w-[1440px] mx-auto px-4 md:px-8">
           <div className="flex items-center justify-between h-14 md:h-16">
             {/* Logo */}
-            <Link href="/" className="flex items-center gap-2.5 group">
-              <div className="w-8 h-8 rounded-lg bg-emerald-500 flex items-center justify-center
-                group-hover:bg-emerald-400 transition-colors duration-300">
-                <span className="text-gray-950 font-bold font-english text-sm">Q</span>
-              </div>
-              <span className="hidden md:block text-white/90 font-english font-medium text-sm tracking-tight">
-                Quran App
-              </span>
-            </Link>
+            <div className="flex items-center gap-2.5">
+              <Link href="/" className="flex items-center gap-2.5 group">
+                <div className="w-8 h-8 rounded-lg bg-emerald-500 flex items-center justify-center
+                  group-hover:bg-emerald-400 transition-colors duration-300">
+                  <span className="text-gray-950 font-bold font-english text-sm">Q</span>
+                </div>
+                {!currentSurah && (
+                  <span className="hidden md:block text-white/90 font-english font-medium text-sm tracking-tight">
+                    Quran App
+                  </span>
+                )}
+              </Link>
+              {currentSurah && (
+                <div className="flex items-center gap-2">
+                  <span className="text-gray-700">/</span>
+                  <span dir="rtl" className="font-Scheherazade_New text-base text-gray-200">
+                    {currentSurah.arabic}
+                  </span>
+                  <span className="hidden sm:inline text-xs text-gray-500 font-english">
+                    {currentSurah.name}
+                  </span>
+                </div>
+              )}
+            </div>
 
             {/* Center Navigation */}
             <nav className="hidden md:flex items-center gap-0.5">

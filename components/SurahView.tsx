@@ -54,7 +54,7 @@ function FlowView({
   return (
     <motion.div
       className="text-justify font-Scheherazade_New"
-      style={{ fontSize: `${fontSize}px`, lineHeight: "2.6" }}
+      style={{ fontSize: `${fontSize}px`, lineHeight: "2.8" }}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.4, delay: 0.15 }}
@@ -73,11 +73,11 @@ function FlowView({
           <span key={verseKey} id={`verse-${index + 1}`}>
             {showPageBreak && <PageBreak pageNumber={currentPage} />}
             <span
-              className={`inline cursor-pointer rounded-md px-0.5 transition-colors duration-200
-                ${isActive ? "bg-emerald-500/10" : "hover:bg-white/[0.03]"}`}
+              className={`inline cursor-pointer rounded-lg px-1 transition-colors duration-200
+                ${isActive ? "bg-emerald-500/8" : "hover:bg-white/[0.02]"}`}
               onClick={() => setActiveVerse(isActive ? null : verseKey)}
             >
-              <span className="text-gray-200">{verse.text_uthmani}</span>{" "}
+              <span className="text-gray-100">{verse.text_uthmani}</span>{" "}
               <VerseCount
                 count={index + 1}
                 surahId={surahId}
@@ -87,9 +87,9 @@ function FlowView({
               />{" "}
             </span>
             {showTranslation && isActive && translation && (
-              <span dir="ltr" className="block my-3 mx-2">
-                <span className="block text-sm text-gray-400 font-english leading-relaxed text-left py-3 px-4 rounded-lg bg-white/[0.02] border border-white/[0.04]">
-                  <span className="text-emerald-400/60 text-xs font-medium mr-2">{index + 1}</span>
+              <span dir="ltr" className="block my-4 mx-1">
+                <span className="block text-sm text-gray-400/90 font-english leading-relaxed text-left py-3.5 px-5 rounded-xl bg-white/[0.02] border border-white/[0.05]">
+                  <span className="text-emerald-400/50 text-xs font-medium mr-2">{index + 1}</span>
                   {translation}
                 </span>
               </span>

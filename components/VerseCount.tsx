@@ -27,19 +27,22 @@ export default function VerseCount({ count, surahId, surahName, arabicName, vers
   };
 
   return (
-    <span className="inline-flex items-center justify-center mx-1 select-none group/verse">
-      <span className="text-sm font-english text-emerald-400 tabular-nums">
+    <span className="inline-flex items-center justify-center mx-1.5 select-none group/verse align-middle">
+      <span
+        className="inline-flex items-center justify-center text-emerald-400/80 tabular-nums"
+        style={{ fontSize: "0.55em" }}
+      >
         ﴿{count}﴾
       </span>
       {surahId && (
         <button
           onClick={handleClick}
-          className={`ml-0.5 opacity-0 group-hover/verse:opacity-100 transition-opacity duration-200
+          className={`ml-1 opacity-0 group-hover/verse:opacity-100 transition-opacity duration-200
             ${bookmarked ? "!opacity-100" : ""}`}
           title={bookmarked ? "Remove bookmark" : "Bookmark verse"}
         >
           <svg
-            className={`w-3 h-3 ${bookmarked ? "text-emerald-400 fill-emerald-400" : "text-gray-600 hover:text-emerald-400"}`}
+            className={`w-3.5 h-3.5 ${bookmarked ? "text-emerald-400 fill-emerald-400" : "text-gray-600 hover:text-emerald-400"}`}
             viewBox="0 0 24 24"
             fill={bookmarked ? "currentColor" : "none"}
             stroke="currentColor"
