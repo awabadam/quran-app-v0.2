@@ -131,10 +131,12 @@ function MushafPage({
   pageData,
   position,
   fontSize,
+  showBismillah = false,
 }: {
   pageData: PageData | null;
   position: "right" | "left";
   fontSize: number;
+  showBismillah?: boolean;
 }) {
   const roundedClass =
     position === "right" ? "rounded-l-2xl rounded-r-none" : "rounded-r-2xl rounded-l-none";
@@ -175,6 +177,13 @@ function MushafPage({
           textAlign: "justify",
           textAlignLast: "right",
         }}>
+        {showBismillah && (
+          <div className="text-center pb-4 mb-2" style={{ textAlign: "center" }}>
+            <span className="text-gray-200" style={{ fontSize: "1.2em" }}>
+              بِسْمِ ٱللَّهِ ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ
+            </span>
+          </div>
+        )}
         {allLineNumbers.map((lineNum) => {
           const words = lines.get(lineNum) || [];
           if (words.length === 0) return null;
@@ -320,7 +329,8 @@ function SpreadView({
           className="grid grid-cols-1 lg:grid-cols-2 gap-0"
         >
           {/* Right page (first in RTL reading) */}
-          <MushafPage pageData={rightPage} position="right" fontSize={fontSize} />
+          <MushafPage pageData={rightPage} position="right" fontSize={fontSize}
+            showBismillah={showBismillah && currentLeft === startPage} />
 
           {/* Left page */}
           {leftPageNum ? (

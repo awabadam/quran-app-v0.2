@@ -5,6 +5,10 @@ import { useSettings } from "@/context/SettingsContext";
 export default function Bismillah() {
   const { readingMode } = useSettings();
 
+  if (readingMode === "spread") {
+    return null;
+  }
+
   return (
     <motion.div 
       className="w-full flex items-center justify-center py-5"
