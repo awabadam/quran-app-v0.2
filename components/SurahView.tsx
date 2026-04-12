@@ -178,10 +178,8 @@ function MushafPage({
           textAlignLast: "right",
         }}>
         {showBismillah && (
-          <div className="text-center pb-4 mb-2" style={{ textAlign: "center" }}>
-            <span className="text-gray-200" style={{ fontSize: "1.2em" }}>
-              بِسْمِ ٱللَّهِ ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ
-            </span>
+          <div className="flex justify-center pb-4 mb-2">
+            <img src="/Bismillah.svg" alt="Bismillah" className="h-10 opacity-80" />
           </div>
         )}
         {allLineNumbers.map((lineNum) => {
