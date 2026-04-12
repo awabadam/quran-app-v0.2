@@ -82,14 +82,14 @@ export default function Navbar() {
         className={`
           fixed top-0 left-0 right-0 z-50
           transition-all duration-500
-          ${scrolled
+          ${scrolled || isSurahPage
             ? "bg-[hsl(240,6%,7%)]/90 backdrop-blur-2xl border-b border-white/[0.04]"
             : "bg-transparent"
           }
         `}
       >
         <div className="max-w-[1440px] mx-auto px-4 md:px-8">
-          <div className="flex items-center justify-between h-14 md:h-16">
+          <div className="flex items-center justify-between h-12 md:h-14">
             {/* Logo */}
             <div className="flex items-center gap-2.5">
               <Link href="/" className="flex items-center gap-2.5 group">
