@@ -30,13 +30,17 @@ export default function VerseCount({ count, surahId, surahName, arabicName, vers
   return (
     <span
       className={`inline-flex items-center justify-center mx-1 select-none align-middle
+        rounded-full transition-all duration-200
         ${canBookmark ? "cursor-pointer" : ""}
-        ${bookmarked ? "text-emerald-400" : "text-emerald-400/70"}`}
-      style={{ fontSize: "1.1em" }}
+        ${bookmarked
+          ? "bg-emerald-500 text-gray-950"
+          : "text-emerald-400/70"
+        }`}
+      style={{ fontSize: "1.1em", padding: bookmarked ? "0 0.15em" : undefined }}
       onClick={canBookmark ? handleClick : undefined}
       title={canBookmark ? (bookmarked ? "Remove bookmark" : "Bookmark this verse") : undefined}
     >
-      {bookmarked ? "﴾" : "﴿"}{count}{bookmarked ? "﴿" : "﴾"}
+      ﴿{count}﴾
     </span>
   );
 }
