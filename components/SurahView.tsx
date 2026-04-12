@@ -53,8 +53,14 @@ function FlowView({
 
   return (
     <motion.div
-      className="text-justify font-Scheherazade_New"
-      style={{ fontSize: `${fontSize}px`, lineHeight: "2.8" }}
+      className="font-Scheherazade_New"
+      style={{
+        fontSize: `${fontSize}px`,
+        lineHeight: "2.8",
+        textAlign: "justify",
+        textAlignLast: "right",
+        wordSpacing: "0.05em",
+      }}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.4, delay: 0.15 }}
