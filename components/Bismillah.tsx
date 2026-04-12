@@ -4,11 +4,6 @@ import { useSettings } from "@/context/SettingsContext";
 
 export default function Bismillah() {
   const { readingMode } = useSettings();
-  
-  // Hide in spread mode - it will appear as part of the page content
-  if (readingMode === "spread") {
-    return null;
-  }
 
   return (
     <motion.div 
