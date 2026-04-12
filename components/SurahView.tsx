@@ -130,9 +130,11 @@ interface PageData {
 function MushafPage({
   pageData,
   position,
+  fontSize,
 }: {
   pageData: PageData | null;
   position: "right" | "left";
+  fontSize: number;
 }) {
   const roundedClass =
     position === "right" ? "rounded-l-2xl rounded-r-none" : "rounded-r-2xl rounded-l-none";
@@ -141,7 +143,7 @@ function MushafPage({
 
   if (!pageData || pageData.loading) {
     return (
-      <div className={`aspect-[9/14] bg-[hsl(240,4%,8%)] border border-white/[0.04] flex items-center justify-center ${roundedClass}`}>
+      <div className={`min-h-[60vh] bg-[hsl(240,4%,8%)] border border-white/[0.04] flex items-center justify-center ${roundedClass}`}>
         <div className="flex flex-col items-center gap-3">
           <div className="w-5 h-5 border-2 border-emerald-500/30 border-t-emerald-500 rounded-full animate-spin" />
           <span className="text-[11px] text-gray-600 font-english">Loading page...</span>
@@ -154,7 +156,7 @@ function MushafPage({
   const allLineNumbers = Array.from({ length: 15 }, (_, i) => i + 1);
 
   return (
-    <div className={`aspect-[9/14] bg-[hsl(240,4%,8%)] border border-white/[0.04] ${borderClass} flex flex-col py-5 px-5 lg:py-7 lg:px-9 ${roundedClass}`}>
+    <div className={`min-h-[60vh] bg-[hsl(240,4%,8%)] border border-white/[0.04] ${borderClass} flex flex-col py-5 px-5 lg:py-7 lg:px-9 ${roundedClass}`}>
       {/* Page number header */}
       <div className="flex items-center justify-center mb-3 pb-2.5 flex-shrink-0">
         <div className="flex items-center gap-3">
@@ -166,7 +168,7 @@ function MushafPage({
 
       {/* 15 lines */}
       <div className="flex-1 flex flex-col justify-between font-Scheherazade_New" dir="rtl"
-        style={{ fontSize: "clamp(16px, 2.3vw, 26px)", lineHeight: "2.0" }}>
+        style={{ fontSize: `${fontSize}px`, lineHeight: "2.8", wordSpacing: "0.05em" }}>
         {allLineNumbers.map((lineNum) => {
           const words = lines.get(lineNum) || [];
 
@@ -177,8 +179,8 @@ function MushafPage({
           return (
             <p
               key={lineNum}
-              className="flex-1 flex items-center text-justify text-gray-100"
-              style={{ textAlignLast: "justify" }}
+              className="flex-1 flex items-center text-gray-100"
+              style={{ textAlign: "justify", textAlignLast: "right" }}
             >
               {words.map((word, wi) => {
                 if (word.char_type_name === "end") {
@@ -213,9 +215,11 @@ function MushafPage({
 function SpreadView({
   surahPages,
   showBismillah = false,
+  fontSize,
 }: {
   surahPages: [number, number];
   showBismillah?: boolean;
+  fontSize: number;
 }) {
   const [startPage, endPage] = surahPages;
   const totalPages = endPage - startPage + 1;
@@ -321,13 +325,13 @@ function SpreadView({
           className="grid grid-cols-1 lg:grid-cols-2 gap-0"
         >
           {/* Right page (first in RTL reading) */}
-          <MushafPage pageData={rightPage} position="right" />
+          <MushafPage pageData={rightPage} position="right" fontSize={fontSize} />
 
           {/* Left page */}
           {leftPageNum ? (
-            <MushafPage pageData={leftPage} position="left" />
+            <MushafPage pageData={leftPage} position="left" fontSize={fontSize} />
           ) : (
-            <div className="aspect-[9/14] rounded-r-2xl border border-white/[0.03] border-dashed bg-white/[0.01] hidden lg:block" />
+            <div className="min-h-[60vh] rounded-r-2xl border border-white/[0.03] border-dashed bg-white/[0.01] hidden lg:block" />
           )}
         </motion.div>
       </AnimatePresence>
@@ -432,7 +436,7 @@ export default function SurahView({
     <>
       {readingMode === "spread" && surahPages ? (
         <div className="max-w-[1400px] mx-auto">
-          <SpreadView surahPages={surahPages} showBismillah={showBismillah} />
+          <SpreadView surahPages={surahPages} showBismillah={showBismillah} fontSize={fontSize} />
         </div>
       ) : (
         <div className="max-w-4xl mx-auto">
