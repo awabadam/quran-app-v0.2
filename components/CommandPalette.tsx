@@ -1,16 +1,28 @@
 "use client";
 
-import { useState } from "react";
-import { Combobox, ComboboxInput, ComboboxOption, ComboboxOptions, Dialog, DialogPanel, Transition, TransitionChild } from "@headlessui/react";
+import { useState, useEffect, useRef, useCallback } from "react";
+import { Dialog, DialogPanel, Transition, TransitionChild } from "@headlessui/react";
 import { surahs } from "@/lib/surahs";
 import { useRouter } from "next/navigation";
 import { useSettings } from "@/context/SettingsContext";
 
+interface VerseResult {
+  verse_key: string;
+  text: string;
+  translations: { text: string; name: string }[];
+}
+
+const hasArabic = (text: string) => /[\u0600-\u06FF]/.test(text);
+
 export default function CommandPalette() {
   const { isSearchOpen, setIsSearchOpen } = useSettings();
   const [query, setQuery] = useState("");
+  const [verseResults, setVerseResults] = useState<VerseResult[]>([]);
+  const [searching, setSearching] = useState(false);
   const router = useRouter();
+  const debounceRef = useRef<NodeJS.Timeout>(undefined);
 
+  // Filter surahs locally (instant)
   const filteredSurahs =
     query === ""
       ? []
@@ -22,11 +34,61 @@ export default function CommandPalette() {
           );
         });
 
+  // Debounced verse search (API call)
+  const searchVerses = useCallback(async (q: string) => {
+    if (!q || q.length < 3) {
+      setVerseResults([]);
+      return;
+    }
+
+    setSearching(true);
+    try {
+      const language = hasArabic(q) ? "ar" : "en";
+      const res = await fetch(
+        `https://api.quran.com/api/v4/search?q=${encodeURIComponent(q)}&language=${language}&size=5&page=1`
+      );
+      if (!res.ok) { setVerseResults([]); return; }
+      const text = await res.text();
+      if (!text) { setVerseResults([]); return; }
+      const data = JSON.parse(text);
+      setVerseResults(data?.search?.results || []);
+    } catch {
+      setVerseResults([]);
+    } finally {
+      setSearching(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    clearTimeout(debounceRef.current);
+    if (query.length >= 3) {
+      debounceRef.current = setTimeout(() => searchVerses(query), 400);
+    } else {
+      setVerseResults([]);
+    }
+    return () => clearTimeout(debounceRef.current);
+  }, [query, searchVerses]);
+
+  // Reset on close
+  useEffect(() => {
+    if (!isSearchOpen) {
+      setQuery("");
+      setVerseResults([]);
+    }
+  }, [isSearchOpen]);
+
+  const navigate = (path: string) => {
+    setIsSearchOpen(false);
+    router.push(path);
+  };
+
+  const hasResults = filteredSurahs.length > 0 || verseResults.length > 0;
+
   return (
     <Transition show={isSearchOpen}>
       <Dialog as="div" className="relative z-50" onClose={setIsSearchOpen}>
         <TransitionChild
-                   enter="ease-out duration-200"
+          enter="ease-out duration-200"
           enterFrom="opacity-0"
           enterTo="opacity-100"
           leave="ease-in duration-150"
@@ -38,7 +100,7 @@ export default function CommandPalette() {
 
         <div className="fixed inset-0 z-10 overflow-y-auto p-4 sm:p-6 md:p-20">
           <TransitionChild
-                       enter="ease-out duration-200"
+            enter="ease-out duration-200"
             enterFrom="opacity-0 scale-95"
             enterTo="opacity-100 scale-100"
             leave="ease-in duration-150"
@@ -47,47 +109,47 @@ export default function CommandPalette() {
           >
             <DialogPanel className="mx-auto max-w-lg transform overflow-hidden rounded-2xl
               bg-[hsl(240,5%,10%)] border border-white/[0.06] shadow-2xl transition-all">
-              <Combobox
-                onChange={(surah: any) => {
-                  if (surah) {
-                    setIsSearchOpen(false);
-                    router.push(`/${surah.id}`);
-                  }
-                }}
-              >
-                <div className="relative border-b border-white/[0.04]">
-                  <div className="pointer-events-none absolute inset-y-0 left-4 flex items-center">
+
+              {/* Search input */}
+              <div className="relative border-b border-white/[0.04]">
+                <div className="pointer-events-none absolute inset-y-0 left-4 flex items-center">
+                  {searching ? (
+                    <div className="w-4 h-4 border-2 border-emerald-500/30 border-t-emerald-500 rounded-full animate-spin" />
+                  ) : (
                     <svg className="h-4 w-4 text-gray-500" viewBox="0 0 20 20" fill="currentColor">
                       <path fillRule="evenodd" d="M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.452 4.391l3.328 3.329a.75.75 0 11-1.06 1.06l-3.329-3.328A7 7 0 012 9z" clipRule="evenodd" />
                     </svg>
-                  </div>
-                  <ComboboxInput
-                    className="h-12 w-full border-0 bg-transparent pl-11 pr-4 text-gray-100
-                      placeholder:text-gray-600 focus:ring-0 text-sm font-english outline-none"
-                    placeholder="Search surahs or Quran text..."
-                    onChange={(event) => setQuery(event.target.value)}
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter" && query && filteredSurahs.length === 0) {
-                        e.preventDefault();
-                        setIsSearchOpen(false);
-                        router.push(`/search?q=${encodeURIComponent(query)}`);
-                      }
-                    }}
-                    autoComplete="off"
-                  />
+                  )}
                 </div>
+                <input
+                  className="h-12 w-full border-0 bg-transparent pl-11 pr-4 text-gray-100
+                    placeholder:text-gray-600 focus:ring-0 text-sm font-english outline-none"
+                  placeholder="Search surahs, verses, or translations..."
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" && query.length >= 3) {
+                      navigate(`/search?q=${encodeURIComponent(query)}`);
+                    }
+                  }}
+                  autoComplete="off"
+                  autoFocus
+                />
+              </div>
 
+              <div className="max-h-96 overflow-y-auto">
+                {/* Surah matches */}
                 {filteredSurahs.length > 0 && (
-                  <ComboboxOptions static className="max-h-80 overflow-y-auto p-2">
-                    {filteredSurahs.map((surah) => (
-                      <ComboboxOption
+                  <div>
+                    <p className="px-4 pt-3 pb-1 text-[11px] text-gray-600 font-english uppercase tracking-wider">
+                      Surahs
+                    </p>
+                    {filteredSurahs.slice(0, 5).map((surah) => (
+                      <button
                         key={surah.id}
-                        value={surah}
-                        className={({ active }) =>
-                          `flex cursor-pointer select-none rounded-xl p-2.5 transition-colors ${
-                            active ? "bg-white/[0.04]" : ""
-                          }`
-                        }
+                        onClick={() => navigate(`/${surah.id}`)}
+                        className="w-full flex cursor-pointer select-none rounded-xl p-2.5 mx-1 transition-colors hover:bg-white/[0.04]"
+                        style={{ width: "calc(100% - 8px)" }}
                       >
                         <div className="flex flex-auto items-center gap-3">
                           <div className="flex h-8 w-8 flex-none items-center justify-center rounded-lg
@@ -99,46 +161,88 @@ export default function CommandPalette() {
                             <span className="text-xs text-gray-600 font-Scheherazade_New text-left">{surah.arabic}</span>
                           </div>
                         </div>
-                      </ComboboxOption>
+                      </button>
                     ))}
-                  </ComboboxOptions>
+                  </div>
                 )}
 
-                {query !== "" && (
+                {/* Verse matches */}
+                {verseResults.length > 0 && (
+                  <div>
+                    <p className="px-4 pt-3 pb-1 text-[11px] text-gray-600 font-english uppercase tracking-wider">
+                      Verses
+                    </p>
+                    {verseResults.map((result) => {
+                      const [surahId, verseNum] = result.verse_key.split(":");
+                      const translationText = result.translations?.[0]?.text?.replace(/<[^>]*>/g, "") || "";
+                      return (
+                        <button
+                          key={result.verse_key}
+                          onClick={() => navigate(`/${surahId}?verse=${verseNum}`)}
+                          className="w-full text-left p-2.5 mx-1 rounded-xl transition-colors hover:bg-white/[0.04]"
+                          style={{ width: "calc(100% - 8px)" }}
+                        >
+                          <div className="flex items-start gap-3">
+                            <span className="text-xs font-english text-emerald-400 font-medium mt-0.5 shrink-0">
+                              {result.verse_key}
+                            </span>
+                            <div className="min-w-0 flex-1">
+                              <p dir="rtl" className="text-sm text-gray-300 font-Scheherazade_New leading-relaxed truncate">
+                                {result.text}
+                              </p>
+                              {translationText && (
+                                <p className="text-xs text-gray-600 font-english truncate mt-0.5">
+                                  {translationText}
+                                </p>
+                              )}
+                            </div>
+                          </div>
+                        </button>
+                      );
+                    })}
+                  </div>
+                )}
+
+                {/* See all results link */}
+                {query.length >= 3 && (
                   <button
-                    onClick={() => {
-                      setIsSearchOpen(false);
-                      router.push(`/search?q=${encodeURIComponent(query)}`);
-                    }}
-                    className="w-full p-4 text-left hover:bg-white/[0.04] transition-colors border-t border-white/[0.04]"
+                    onClick={() => navigate(`/search?q=${encodeURIComponent(query)}`)}
+                    className="w-full p-3 text-center text-xs text-emerald-400 hover:text-emerald-300
+                      hover:bg-white/[0.03] transition-colors border-t border-white/[0.04] font-english"
                   >
-                    <div className="flex items-center gap-3">
-                      <div className="flex h-8 w-8 flex-none items-center justify-center rounded-lg
-                        bg-emerald-500/10 text-emerald-400">
-                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-                            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                        </svg>
-                      </div>
-                      <div>
-                        <p className="text-sm text-gray-200 font-english">
-                          Search Quran for &ldquo;{query}&rdquo;
-                        </p>
-                        <p className="text-xs text-gray-600 font-english">
-                          Search verses and translations
-                        </p>
-                      </div>
-                    </div>
+                    See all results for &ldquo;{query}&rdquo; →
                   </button>
                 )}
 
-                {query === "" && (
-                  <div className="py-12 px-6 text-center">
-                    <p className="text-sm text-gray-400 font-english">Search for a surah</p>
-                    <p className="mt-1 text-xs text-gray-700 font-english">by name, Arabic, or number</p>
+                {/* Loading state */}
+                {searching && verseResults.length === 0 && filteredSurahs.length === 0 && (
+                  <div className="py-8 text-center">
+                    <p className="text-sm text-gray-600 font-english">Searching...</p>
                   </div>
                 )}
-              </Combobox>
+
+                {/* No results */}
+                {query.length >= 3 && !searching && !hasResults && (
+                  <div className="py-8 text-center">
+                    <p className="text-sm text-gray-600 font-english">No results found</p>
+                  </div>
+                )}
+
+                {/* Empty state */}
+                {query === "" && (
+                  <div className="py-12 px-6 text-center">
+                    <p className="text-sm text-gray-400 font-english">Search the Quran</p>
+                    <p className="mt-1 text-xs text-gray-700 font-english">by surah name, verse text, or translation</p>
+                  </div>
+                )}
+
+                {/* Typing hint */}
+                {query.length > 0 && query.length < 3 && filteredSurahs.length === 0 && (
+                  <div className="py-8 text-center">
+                    <p className="text-xs text-gray-600 font-english">Type at least 3 characters to search verses</p>
+                  </div>
+                )}
+              </div>
             </DialogPanel>
           </TransitionChild>
         </div>
