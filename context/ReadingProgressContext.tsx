@@ -6,12 +6,13 @@ interface ReadingProgress {
   surahId: number;
   surahName: string;
   surahArabic: string;
+  verseNumber: number;
   timestamp: string;
 }
 
 interface ReadingProgressContextType {
   lastRead: ReadingProgress | null;
-  saveProgress: (surahId: number) => void;
+  saveProgress: (surahId: number, verseNumber?: number) => void;
   clearProgress: () => void;
 }
 
@@ -32,13 +33,14 @@ export function ReadingProgressProvider({ children }: { children: ReactNode }) {
     }
   }, []);
 
-  const saveProgress = (surahId: number) => {
+  const saveProgress = (surahId: number, verseNumber?: number) => {
     const surah = surahs.find(s => s.id === surahId);
     if (surah) {
       const progress: ReadingProgress = {
         surahId: surah.id,
         surahName: surah.name,
         surahArabic: surah.arabic,
+        verseNumber: verseNumber || lastRead?.verseNumber || 1,
         timestamp: new Date().toISOString(),
       };
       setLastRead(progress);

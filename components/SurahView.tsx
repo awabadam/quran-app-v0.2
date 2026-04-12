@@ -2,6 +2,7 @@
 import { useEffect, useState, useMemo, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useSettings } from "@/context/SettingsContext";
+import { useReadingProgress } from "@/context/ReadingProgressContext";
 import { surahs } from "@/lib/surahs";
 import VerseCount from "./VerseCount";
 import SettingsDrawer from "./SettingsDrawer";
@@ -375,27 +376,45 @@ export default function SurahView({
   surahPages,
 }: SurahViewProps) {
   const { fontSize, readingMode } = useSettings();
+  const { saveProgress } = useReadingProgress();
 
   const surahIdNum = surahId ? parseInt(surahId) : undefined;
   const surah = surahIdNum ? surahs.find((s) => s.id === surahIdNum) : undefined;
 
+  // Save surah on mount
   useEffect(() => {
-    if (surahId) {
-      const surahIdNum = parseInt(surahId);
-      const surah = surahs.find((s) => s.id === surahIdNum);
-      if (surah) {
-        localStorage.setItem(
-          "readingProgress",
-          JSON.stringify({
-            surahId: surah.id,
-            surahName: surah.name,
-            surahArabic: surah.arabic,
-            timestamp: new Date().toISOString(),
-          })
-        );
-      }
+    if (surahIdNum) {
+      saveProgress(surahIdNum);
     }
-  }, [surahId]);
+  }, [surahIdNum]);
+
+  // Track scroll position to save verse-level progress (debounced)
+  useEffect(() => {
+    if (readingMode !== "flow" || !surahIdNum) return;
+
+    let timeout: NodeJS.Timeout;
+    const handleScroll = () => {
+      clearTimeout(timeout);
+      timeout = setTimeout(() => {
+        const viewportTop = window.scrollY + window.innerHeight * 0.3;
+        let closestVerse = 1;
+        for (let i = verses.length; i >= 1; i--) {
+          const el = document.getElementById(`verse-${i}`);
+          if (el && el.offsetTop <= viewportTop) {
+            closestVerse = i;
+            break;
+          }
+        }
+        saveProgress(surahIdNum, closestVerse);
+      }, 1000);
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => {
+      clearTimeout(timeout);
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [surahIdNum, readingMode, verses.length, saveProgress]);
 
   return (
     <>
