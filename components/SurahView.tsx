@@ -166,39 +166,34 @@ function MushafPage({
         </div>
       </div>
 
-      {/* 15 lines */}
-      <div className="flex-1 flex flex-col justify-between font-Scheherazade_New" dir="rtl"
-        style={{ fontSize: `${fontSize}px`, lineHeight: "2.8", wordSpacing: "0.05em" }}>
+      {/* Content — rendered as continuous inline text, same as FlowView */}
+      <div className="flex-1 font-Scheherazade_New text-gray-100" dir="rtl"
+        style={{
+          fontSize: `${fontSize}px`,
+          lineHeight: "2.8",
+          wordSpacing: "0.05em",
+          textAlign: "justify",
+          textAlignLast: "right",
+        }}>
         {allLineNumbers.map((lineNum) => {
           const words = lines.get(lineNum) || [];
+          if (words.length === 0) return null;
 
-          if (words.length === 0) {
-            return <div key={lineNum} className="flex-1" />;
-          }
-
-          return (
-            <p
-              key={lineNum}
-              className="flex-1 flex items-center text-gray-100"
-              style={{ textAlign: "justify", textAlignLast: "right" }}
-            >
-              {words.map((word, wi) => {
-                if (word.char_type_name === "end") {
-                  const verseNum = parseInt(word.verse_key?.split(":")[1] || "0");
-                  return (
-                    <span key={`${word.id}-${wi}`}>
-                      {" "}<VerseCount count={verseNum} />{" "}
-                    </span>
-                  );
-                }
-                return (
-                  <span key={`${word.id}-${wi}`} className="hover:text-emerald-300/80 transition-colors">
-                    {word.text}{" "}
-                  </span>
-                );
-              })}
-            </p>
-          );
+          return words.map((word, wi) => {
+            if (word.char_type_name === "end") {
+              const verseNum = parseInt(word.verse_key?.split(":")[1] || "0");
+              return (
+                <span key={`${word.id}-${wi}`}>
+                  {" "}<VerseCount count={verseNum} />{" "}
+                </span>
+              );
+            }
+            return (
+              <span key={`${word.id}-${wi}`}>
+                {word.text}{" "}
+              </span>
+            );
+          });
         })}
       </div>
 
