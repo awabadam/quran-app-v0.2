@@ -135,14 +135,16 @@ function MushafPage({
   position: "right" | "left";
 }) {
   const roundedClass =
-    position === "right" ? "rounded-l-lg rounded-r-none" : "rounded-r-lg rounded-l-none";
+    position === "right" ? "rounded-l-2xl rounded-r-none" : "rounded-r-2xl rounded-l-none";
+  const borderClass =
+    position === "right" ? "border-r border-white/[0.03]" : "border-l border-white/[0.03]";
 
   if (!pageData || pageData.loading) {
     return (
-      <div className={`aspect-[9/14] bg-[hsl(240,5%,9%)] border border-white/[0.05] flex items-center justify-center ${roundedClass}`}>
-        <div className="flex flex-col items-center gap-2">
-          <div className="w-6 h-6 border-2 border-emerald-500/30 border-t-emerald-500 rounded-full animate-spin" />
-          <span className="text-xs text-gray-600 font-english">Loading...</span>
+      <div className={`aspect-[9/14] bg-[hsl(240,4%,8%)] border border-white/[0.04] flex items-center justify-center ${roundedClass}`}>
+        <div className="flex flex-col items-center gap-3">
+          <div className="w-5 h-5 border-2 border-emerald-500/30 border-t-emerald-500 rounded-full animate-spin" />
+          <span className="text-[11px] text-gray-600 font-english">Loading page...</span>
         </div>
       </div>
     );
@@ -152,15 +154,19 @@ function MushafPage({
   const allLineNumbers = Array.from({ length: 15 }, (_, i) => i + 1);
 
   return (
-    <div className={`aspect-[9/14] bg-[hsl(240,5%,9%)] border border-white/[0.05] flex flex-col py-4 px-5 lg:py-6 lg:px-8 ${roundedClass}`}>
+    <div className={`aspect-[9/14] bg-[hsl(240,4%,8%)] border border-white/[0.04] ${borderClass} flex flex-col py-5 px-5 lg:py-7 lg:px-9 ${roundedClass}`}>
       {/* Page number header */}
-      <div className="flex items-center justify-center mb-2 pb-2 border-b border-white/[0.03] flex-shrink-0">
-        <span className="text-xs font-english text-gray-500 tabular-nums">{pageNumber}</span>
+      <div className="flex items-center justify-center mb-3 pb-2.5 flex-shrink-0">
+        <div className="flex items-center gap-3">
+          <div className="w-12 h-px bg-gradient-to-r from-transparent to-white/[0.06]" />
+          <span className="text-[11px] font-english text-gray-600 tabular-nums">{pageNumber}</span>
+          <div className="w-12 h-px bg-gradient-to-l from-transparent to-white/[0.06]" />
+        </div>
       </div>
 
       {/* 15 lines */}
       <div className="flex-1 flex flex-col justify-between font-Scheherazade_New" dir="rtl"
-        style={{ fontSize: "clamp(15px, 2.2vw, 24px)", lineHeight: "1.9" }}>
+        style={{ fontSize: "clamp(16px, 2.3vw, 26px)", lineHeight: "2.0" }}>
         {allLineNumbers.map((lineNum) => {
           const words = lines.get(lineNum) || [];
 
@@ -171,20 +177,20 @@ function MushafPage({
           return (
             <p
               key={lineNum}
-              className="flex-1 flex items-center text-justify text-gray-200"
+              className="flex-1 flex items-center text-justify text-gray-100"
               style={{ textAlignLast: "justify" }}
             >
               {words.map((word, wi) => {
                 if (word.char_type_name === "end") {
                   const verseNum = word.verse_key?.split(":")[1];
                   return (
-                    <span key={`${word.id}-${wi}`} className="text-emerald-400 font-english" style={{ fontSize: "0.5em" }}>
+                    <span key={`${word.id}-${wi}`} className="text-emerald-400/80" style={{ fontSize: "0.75em" }}>
                       {" "}﴿{verseNum}﴾{" "}
                     </span>
                   );
                 }
                 return (
-                  <span key={`${word.id}-${wi}`} className="hover:text-emerald-300 transition-colors cursor-pointer">
+                  <span key={`${word.id}-${wi}`} className="hover:text-emerald-300/80 transition-colors">
                     {word.text}{" "}
                   </span>
                 );
@@ -195,8 +201,8 @@ function MushafPage({
       </div>
 
       {/* Footer ornament */}
-      <div className="mt-2 pt-2 border-t border-white/[0.03] flex justify-center flex-shrink-0">
-        <div className="w-10 h-px bg-gradient-to-r from-transparent via-emerald-500/15 to-transparent" />
+      <div className="mt-3 pt-2.5 flex justify-center flex-shrink-0">
+        <div className="w-16 h-px bg-gradient-to-r from-transparent via-emerald-500/20 to-transparent" />
       </div>
     </div>
   );
@@ -310,7 +316,7 @@ function SpreadView({
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.2 }}
+          transition={{ duration: 0.25 }}
           dir="rtl"
           className="grid grid-cols-1 lg:grid-cols-2 gap-0"
         >
@@ -321,48 +327,48 @@ function SpreadView({
           {leftPageNum ? (
             <MushafPage pageData={leftPage} position="left" />
           ) : (
-            <div className="aspect-[9/14] rounded-r-lg border border-white/[0.03] border-dashed border-r-0 bg-white/[0.005] hidden lg:block" />
+            <div className="aspect-[9/14] rounded-r-2xl border border-white/[0.03] border-dashed bg-white/[0.01] hidden lg:block" />
           )}
         </motion.div>
       </AnimatePresence>
 
       {/* Navigation */}
-      <div dir="rtl" className="flex items-center justify-center gap-8 pt-6 pb-4">
+      <div dir="rtl" className="flex items-center justify-center gap-6 pt-8 pb-4">
         <button
           onClick={goPrev}
           disabled={!canGoPrev}
-          className={`flex items-center gap-2 px-5 py-2.5 rounded-full font-english text-sm transition-all duration-200 ${
+          className={`flex items-center gap-2 px-4 py-2 rounded-xl font-english text-xs transition-all duration-200 ${
             canGoPrev
-              ? "bg-white/[0.04] text-gray-300 hover:text-white border border-white/[0.06]"
-              : "text-gray-700 cursor-not-allowed"
+              ? "bg-white/[0.03] text-gray-400 hover:text-white hover:bg-white/[0.06] border border-white/[0.05]"
+              : "text-gray-800 cursor-not-allowed"
           }`}
         >
-          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
           </svg>
           Previous
         </button>
 
-        <div className="flex flex-col items-center gap-0.5">
-          <span className="text-sm text-gray-400 font-english tabular-nums">
+        <div className="flex items-center gap-2">
+          <span className="text-xs text-gray-400 font-english tabular-nums">
             {rightPageNum}{leftPageNum ? ` – ${leftPageNum}` : ""}
           </span>
-          <span className="text-[10px] text-gray-600 font-english">
-            of {endPage}
+          <span className="text-[10px] text-gray-700 font-english">
+            / {endPage}
           </span>
         </div>
 
         <button
           onClick={goNext}
           disabled={!canGoNext}
-          className={`flex items-center gap-2 px-5 py-2.5 rounded-full font-english text-sm transition-all duration-200 ${
+          className={`flex items-center gap-2 px-4 py-2 rounded-xl font-english text-xs transition-all duration-200 ${
             canGoNext
-              ? "bg-white/[0.04] text-gray-300 hover:text-white border border-white/[0.06]"
-              : "text-gray-700 cursor-not-allowed"
+              ? "bg-white/[0.03] text-gray-400 hover:text-white hover:bg-white/[0.06] border border-white/[0.05]"
+              : "text-gray-800 cursor-not-allowed"
           }`}
         >
           Next
-          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
           </svg>
         </button>
