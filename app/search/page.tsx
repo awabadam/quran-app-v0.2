@@ -34,7 +34,9 @@ async function searchQuran(query: string, page: number): Promise<SearchResponse 
   );
 
   if (!res.ok) return null;
-  return res.json();
+  const text = await res.text();
+  if (!text) return null;
+  return JSON.parse(text);
 }
 
 export default async function SearchPage(

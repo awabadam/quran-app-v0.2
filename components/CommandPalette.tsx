@@ -64,8 +64,15 @@ export default function CommandPalette() {
                   <ComboboxInput
                     className="h-12 w-full border-0 bg-transparent pl-11 pr-4 text-gray-100
                       placeholder:text-gray-600 focus:ring-0 text-sm font-english outline-none"
-                    placeholder="Search surahs..."
+                    placeholder="Search surahs or Quran text..."
                     onChange={(event) => setQuery(event.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" && query && filteredSurahs.length === 0) {
+                        e.preventDefault();
+                        setIsSearchOpen(false);
+                        router.push(`/search?q=${encodeURIComponent(query)}`);
+                      }
+                    }}
                     autoComplete="off"
                   />
                 </div>
