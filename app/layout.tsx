@@ -1,5 +1,5 @@
 import "./globals.css";
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import Navbar, { ReadingNavProvider } from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Scheherazade_New, Inter } from "next/font/google";
@@ -46,7 +46,6 @@ export const metadata: Metadata = {
     index: true,
     follow: true,
   },
-  themeColor: "#10b981",
   manifest: "/manifest.json",
   appleWebApp: {
     capable: true,
@@ -56,6 +55,10 @@ export const metadata: Metadata = {
   other: {
     "mobile-web-app-capable": "yes",
   },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#10b981",
 };
 
 export default function RootLayout({

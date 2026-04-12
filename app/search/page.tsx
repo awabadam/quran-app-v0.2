@@ -37,11 +37,10 @@ async function searchQuran(query: string, page: number): Promise<SearchResponse 
 export default async function SearchPage({
   searchParams,
 }: {
-  searchParams: Promise<{ q?: string; page?: string }>;
+  searchParams: { q?: string; page?: string };
 }) {
-  const params = await searchParams;
-  const query = params.q || "";
-  const page = Math.max(1, parseInt(params.page || "1", 10));
+  const query = searchParams.q || "";
+  const page = Math.max(1, parseInt(searchParams.page || "1", 10));
   const data = await searchQuran(query, page);
 
   return (
