@@ -33,7 +33,7 @@ export default async function Page(props: any) {
       { next: { revalidate: 3600 } }
     ).then((res) => res.json()),
     fetch(
-      `https://api.quran.com/api/v4/quran/translations/131?chapter_number=${params.surah}`,
+      `https://api.quran.com/api/v4/quran/translations/20?chapter_number=${params.surah}`,
       { next: { revalidate: 3600 } }
     ).then((res) => res.json()),
   ]);
