@@ -282,10 +282,18 @@ export default function AthkarPage() {
               {/* Header */}
               <div className="flex items-center justify-between p-4 border-b border-gray-800/50">
                 <div className="flex items-center gap-3">
-                  <div className={`w-10 h-10 rounded-xl flex items-center justify-center text-sm font-bold font-english flex-shrink-0
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      if (!isCompleted(selectedThikr.id, selectedThikr.count)) {
+                        handleCountChange(selectedThikr.id, getCount(selectedThikr.id) + 1);
+                      }
+                    }}
+                    className={`w-10 h-10 rounded-xl flex items-center justify-center text-sm font-bold font-english flex-shrink-0
+                      cursor-pointer active:scale-90 transition-all
                     ${isCompleted(selectedThikr.id, selectedThikr.count)
                       ? "bg-emerald-500 text-white border border-emerald-400"
-                      : "bg-emerald-500/10 border border-emerald-500/20 text-emerald-400"
+                      : "bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 hover:bg-emerald-500/20"
                     }`}>
                     {isCompleted(selectedThikr.id, selectedThikr.count) ? (
                       <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -294,7 +302,7 @@ export default function AthkarPage() {
                     ) : (
                       `${selectedThikr.count - getCount(selectedThikr.id)}`
                     )}
-                  </div>
+                  </button>
                   <div className="min-w-0">
                     <h3 className="text-white font-english font-medium text-sm truncate">
                       {selectedThikr.title}

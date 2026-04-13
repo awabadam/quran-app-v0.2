@@ -55,9 +55,10 @@ export default function ContinueReading() {
           className="w-full"
         >
           <Link href={`/${lastRead.surahId}${lastRead.verseNumber ? `?verse=${lastRead.verseNumber}` : ''}`}>
-            <div className="group flex items-center gap-4 p-4 rounded-2xl
-              bg-white/[0.03] border border-white/[0.05]
-              hover:bg-white/[0.05] hover:border-emerald-500/20
+            <div className="group relative flex items-center gap-4 p-4 rounded-2xl
+              bg-emerald-500/[0.04] border border-emerald-500/20
+              hover:bg-emerald-500/[0.08] hover:border-emerald-500/30
+              shadow-[0_0_20px_rgba(16,185,129,0.06)]
               transition-all duration-300"
             >
               {/* Icon */}
