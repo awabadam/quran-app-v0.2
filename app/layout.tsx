@@ -48,6 +48,9 @@ export const metadata: Metadata = {
     follow: true,
   },
   manifest: "/manifest.json",
+  icons: {
+    apple: "/icons/apple-touch-icon.png",
+  },
   appleWebApp: {
     capable: true,
     statusBarStyle: "black-translucent",
