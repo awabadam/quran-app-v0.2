@@ -29,16 +29,16 @@ const containerVariants = {
     opacity: 1,
     transition: { staggerChildren: 0.02, delayChildren: 0.05 },
   },
-};
+} as const;
 
 const itemVariants = {
   hidden: { opacity: 0, y: 16 },
   visible: {
     opacity: 1,
     y: 0,
-    transition: { type: "spring", stiffness: 150, damping: 20 },
+    transition: { type: "spring" as const, stiffness: 150, damping: 20 },
   },
-};
+} as const;
 
 const filterPills: { label: string; value: RevelationFilter }[] = [
   { label: "All", value: "all" },
