@@ -84,6 +84,38 @@ export default function AboutPage() {
             </Link>
           </section>
 
+          {/* What's New */}
+          <section>
+            <h2 className="text-sm font-medium font-english text-gray-400 uppercase tracking-wider mb-4">
+              What&apos;s New
+            </h2>
+            <div className="space-y-4">
+              <div className="p-4 rounded-xl bg-white/[0.02] border border-white/[0.05]">
+                <div className="flex items-center gap-2 mb-2">
+                  <span className="text-[10px] font-english text-emerald-500 bg-emerald-500/10 px-2 py-0.5 rounded-full">
+                    v0.2
+                  </span>
+                  <span className="text-[11px] text-gray-600 font-english">April 2026</span>
+                </div>
+                <ul className="space-y-1.5">
+                  {[
+                    "Athkar progress now saves and resets daily",
+                    "Auto-advance to next thikr on completion",
+                    "Haptic feedback on athkar counter (mobile)",
+                    "Improved Arabic phrasing in athkar texts",
+                    "Installable as a PWA with offline support",
+                    "Verse sharing with WhatsApp image generation",
+                  ].map((item, i) => (
+                    <li key={i} className="flex items-start gap-2 text-gray-400 font-english text-sm">
+                      <span className="w-1 h-1 rounded-full bg-emerald-500/50 mt-2 flex-shrink-0" />
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </section>
+
           {/* Credits */}
           <section>
             <h2 className="text-sm font-medium font-english text-gray-400 uppercase tracking-wider mb-4">

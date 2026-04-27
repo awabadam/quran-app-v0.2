@@ -1,16 +1,52 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Thikr from "@/components/Thikr";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
-import { athkarData } from "@/lib/athkar_data";
+import athkarData from "@/lib/athkar_data.json";
+
+const STORAGE_KEY = "athkar-counts";
+const STORAGE_DATE_KEY = "athkar-counts-date";
+
+function getTodayKey() {
+  return new Date().toISOString().slice(0, 10);
+}
+
+function loadCounts(): { [key: string]: number } {
+  if (typeof window === "undefined") return {};
+  try {
+    const savedDate = localStorage.getItem(STORAGE_DATE_KEY);
+    // Reset counts if it's a new day
+    if (savedDate !== getTodayKey()) {
+      localStorage.removeItem(STORAGE_KEY);
+      localStorage.setItem(STORAGE_DATE_KEY, getTodayKey());
+      return {};
+    }
+    const saved = localStorage.getItem(STORAGE_KEY);
+    return saved ? JSON.parse(saved) : {};
+  } catch {
+    return {};
+  }
+}
+
+function vibrate(pattern: number | number[]) {
+  if (typeof navigator !== "undefined" && navigator.vibrate) {
+    navigator.vibrate(pattern);
+  }
+}
 
 export default function AthkarPage() {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [selectedThikr, setSelectedThikr] = useState<any>(null);
-  
-  // Track counts for each thikr: { "thikrId": currentCount }
-  const [counts, setCounts] = useState<{ [key: string]: number }>({});
+
+  // Track counts for each thikr, persisted to localStorage (resets daily)
+  const [counts, setCounts] = useState<{ [key: string]: number }>(loadCounts);
+
+  // Persist counts to localStorage on change
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(counts));
+    localStorage.setItem(STORAGE_DATE_KEY, getTodayKey());
+  }, [counts]);
 
   const tabs = [
     { 
@@ -57,10 +93,33 @@ export default function AthkarPage() {
   // Check if thikr is completed
   const isCompleted = (id: string, maxCount: number) => getCount(id) >= maxCount;
 
-  // Handle count change from Thikr component
-  const handleCountChange = (id: string, newCount: number) => {
+  // Handle count change from Thikr component with haptic feedback
+  const handleCountChange = useCallback((id: string, newCount: number, maxCount?: number) => {
     setCounts(prev => ({ ...prev, [id]: newCount }));
-  };
+    if (newCount === 0) return; // reset, no vibration
+    if (maxCount && newCount >= maxCount) {
+      vibrate([50, 30, 100]); // completion pattern
+    } else {
+      vibrate(15); // short tap
+    }
+  }, []);
+
+  // Get the next incomplete thikr in the current tab
+  const getNextThikr = useCallback((currentId: number) => {
+    const currentTab = tabs[selectedIndex];
+    const currentIdx = currentTab.data.findIndex((w: any) => w.id === currentId);
+    // Look for the next incomplete thikr after the current one
+    for (let i = currentIdx + 1; i < currentTab.data.length; i++) {
+      const w = currentTab.data[i] as any;
+      if (!isCompleted(w.id, w.count)) return w;
+    }
+    // Wrap around: check from beginning
+    for (let i = 0; i < currentIdx; i++) {
+      const w = currentTab.data[i] as any;
+      if (!isCompleted(w.id, w.count)) return w;
+    }
+    return null; // all done
+  }, [selectedIndex, counts]);
 
   // Count completed thikr in a tab
   const getCompletedCount = (tabData: any[]) => {
@@ -144,9 +203,27 @@ export default function AthkarPage() {
                       <h2 dir="rtl" className="text-2xl font-Scheherazade_New text-gray-200 mb-1">
                         {tab.arabicTitle}
                       </h2>
-                      <p className="text-gray-500 text-sm font-english">
-                        {getCompletedCount(tab.data)} of {tab.data.length} completed
-                      </p>
+                      <div className="flex items-center justify-center gap-3">
+                        <p className="text-gray-500 text-sm font-english">
+                          {getCompletedCount(tab.data)} of {tab.data.length} completed
+                        </p>
+                        {getCompletedCount(tab.data) > 0 && (
+                          <button
+                            onClick={() => {
+                              const keys = tab.data.map((w: any) => w.id);
+                              setCounts(prev => {
+                                const next = { ...prev };
+                                keys.forEach((k: number) => delete next[k]);
+                                return next;
+                              });
+                            }}
+                            className="text-[11px] text-gray-600 hover:text-red-400 font-english
+                              px-2 py-0.5 rounded-md hover:bg-red-500/10 transition-colors"
+                          >
+                            Reset all
+                          </button>
+                        )}
+                      </div>
                     </div>
                     
                     {/* Cards Grid */}
@@ -286,7 +363,8 @@ export default function AthkarPage() {
                     onClick={(e) => {
                       e.stopPropagation();
                       if (!isCompleted(selectedThikr.id, selectedThikr.count)) {
-                        handleCountChange(selectedThikr.id, getCount(selectedThikr.id) + 1);
+                        const newCount = getCount(selectedThikr.id) + 1;
+                        handleCountChange(selectedThikr.id, newCount, selectedThikr.count);
                       }
                     }}
                     className={`w-10 h-10 rounded-xl flex items-center justify-center text-sm font-bold font-english flex-shrink-0
@@ -308,8 +386,8 @@ export default function AthkarPage() {
                       {selectedThikr.title}
                     </h3>
                     <p className="text-xs text-gray-500 font-english">
-                      {isCompleted(selectedThikr.id, selectedThikr.count) 
-                        ? "Completed!" 
+                      {isCompleted(selectedThikr.id, selectedThikr.count)
+                        ? "Completed!"
                         : "Tap to count"
                       }
                     </p>
@@ -350,9 +428,42 @@ export default function AthkarPage() {
                   source={selectedThikr.source}
                   benefit={selectedThikr.benefit}
                   externalCount={getCount(selectedThikr.id)}
-                  onCountChange={(newCount) => handleCountChange(selectedThikr.id, newCount)}
+                  onCountChange={(newCount) => handleCountChange(selectedThikr.id, newCount, selectedThikr.count)}
                   inline
                 />
+
+                {/* Auto-advance: show Next button when completed */}
+                {isCompleted(selectedThikr.id, selectedThikr.count) && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.3 }}
+                    className="mt-6 flex justify-center"
+                  >
+                    {getNextThikr(selectedThikr.id) ? (
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setSelectedThikr(getNextThikr(selectedThikr.id));
+                        }}
+                        className="flex items-center gap-2 px-5 py-2.5 rounded-xl
+                          bg-emerald-500/10 border border-emerald-500/20
+                          hover:bg-emerald-500/20 hover:border-emerald-500/30
+                          text-emerald-400 text-sm font-english
+                          transition-all duration-200 active:scale-95"
+                      >
+                        Next
+                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                        </svg>
+                      </button>
+                    ) : (
+                      <p className="text-sm text-emerald-400 font-english">
+                        All done for this section!
+                      </p>
+                    )}
+                  </motion.div>
+                )}
               </div>
             </motion.div>
           </motion.div>
