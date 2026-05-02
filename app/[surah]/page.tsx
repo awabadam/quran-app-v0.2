@@ -4,12 +4,15 @@ import React, { Suspense } from "react";
 import SurahView from "@/components/SurahView";
 import SurahHeader from "@/components/SurahHeader";
 import VerseHighlighter from "./VerseHighlighter";
+import { notFound } from "next/navigation";
 
 export async function generateMetadata(props: any) {
   const params = await props.params;
   const surahMeta: any = await fetch(
     `https://api.quran.com/api/v4/chapters/${params.surah}?language=en`
   ).then((res) => res.json());
+
+  if (!surahMeta?.chapter) return { title: "Surah Not Found" };
 
   return {
     title: `Surah ${surahMeta.chapter.name_simple} - ${surahMeta.chapter.name_arabic}`,
@@ -37,6 +40,8 @@ export default async function Page(props: any) {
       { next: { revalidate: 3600 } }
     ).then((res) => res.json()),
   ]);
+
+  if (!surahMeta?.chapter) notFound();
 
   const pageMap: { [key: string]: number } = {};
   versesInfo.verses?.forEach((v: any) => {

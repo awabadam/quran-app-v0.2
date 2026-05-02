@@ -73,7 +73,7 @@ export default async function Home() {
 
       {/* Surah/Juz Browser — main content */}
       <section id="surahs" className="w-full max-w-[1440px] mx-auto px-4 md:px-8 pb-12 md:pb-20">
-        <SurahBrowser chapters={chaptersData.chapters} juzs={juzData.juzs} />
+        <SurahBrowser chapters={chaptersData.chapters ?? []} juzs={juzData.juzs ?? []} />
       </section>
     </main>
   );

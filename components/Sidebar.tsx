@@ -16,8 +16,9 @@ export default function Sidebar() {
         </div>
         <div className="text-right mt-2">
           <div className=" flex flex-col ">
-            {ChaptersList.chapters.map((chapter: any) => (
+            {ChaptersList.chapters?.map((chapter: any) => (
               <Link
+                key={chapter.id}
                 href={`/${chapter.id}`}
                 className="w-full cursor-pointer flex flex-col justify-center items-center"
                 scroll={false}
