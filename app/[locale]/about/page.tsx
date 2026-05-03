@@ -1,7 +1,9 @@
 "use client";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 
 export default function AboutPage() {
+  const t = useTranslations("about");
   return (
     <main className="min-h-screen pt-28 pb-20">
       <div className="max-w-3xl mx-auto px-4 md:px-8">
@@ -9,10 +11,10 @@ export default function AboutPage() {
         {/* Header */}
         <div className="mb-16">
           <h1 className="text-2xl md:text-3xl font-semibold font-english text-white mb-3">
-            About
+            {t('title')}
           </h1>
           <p className="text-gray-500 font-english leading-relaxed">
-            A minimal, ad-free Quran reading experience designed for focus and reflection.
+            {t('tagline')}
           </p>
         </div>
 
@@ -21,28 +23,20 @@ export default function AboutPage() {
           {/* What is it */}
           <section>
             <h2 className="text-sm font-medium font-english text-gray-400 uppercase tracking-wider mb-4">
-              What is this
+              {t('whatIsThis')}
             </h2>
             <p className="text-gray-400 font-english leading-relaxed">
-              Quran App is a clean, distraction-free platform for reading the Holy Quran.
-              Built with simplicity in mind, it offers a focused reading experience without
-              ads, popups, or unnecessary features.
+              {t('whatIsThisText')}
             </p>
           </section>
 
           {/* Features */}
           <section>
             <h2 className="text-sm font-medium font-english text-gray-400 uppercase tracking-wider mb-4">
-              Features
+              {t('features')}
             </h2>
             <div className="space-y-3">
-              {[
-                "Complete Quran with 114 surahs in Uthmani script",
-                "Daily Athkar — morning, evening, and sleep supplications",
-                "Page break indicators for traditional reading",
-                "Adjustable font size and reading settings",
-                "Completely ad-free and open source",
-              ].map((feature, i) => (
+              {([t('feature1'), t('feature2'), t('feature3'), t('feature4'), t('feature5')] as string[]).map((feature, i) => (
                 <div key={i} className="flex items-start gap-3 text-gray-400 font-english text-sm">
                   <span className="w-1 h-1 rounded-full bg-emerald-500/50 mt-2 flex-shrink-0" />
                   <span>{feature}</span>
@@ -54,7 +48,7 @@ export default function AboutPage() {
           {/* Developer */}
           <section>
             <h2 className="text-sm font-medium font-english text-gray-400 uppercase tracking-wider mb-4">
-              Made by
+              {t('madeBy')}
             </h2>
             <Link
               href="https://awab.design"
@@ -75,7 +69,7 @@ export default function AboutPage() {
                   Awab Elkhalil
                 </h3>
                 <p className="text-gray-600 font-english text-xs">
-                  Product Designer &amp; Full-Stack Developer
+                  {t('role')}
                 </p>
               </div>
               <svg className="w-4 h-4 text-gray-700 group-hover:text-emerald-400 transition-colors flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -87,25 +81,18 @@ export default function AboutPage() {
           {/* What's New */}
           <section>
             <h2 className="text-sm font-medium font-english text-gray-400 uppercase tracking-wider mb-4">
-              What&apos;s New
+              {t('whatsNew')}
             </h2>
             <div className="space-y-4">
               <div className="p-4 rounded-xl bg-white/[0.02] border border-white/[0.05]">
                 <div className="flex items-center gap-2 mb-2">
                   <span className="text-[10px] font-english text-emerald-500 bg-emerald-500/10 px-2 py-0.5 rounded-full">
-                    v0.2
+                    {t('version')}
                   </span>
-                  <span className="text-[11px] text-gray-600 font-english">April 2026</span>
+                  <span className="text-[11px] text-gray-600 font-english">{t('versionDate')}</span>
                 </div>
                 <ul className="space-y-1.5">
-                  {[
-                    "Athkar progress now saves and resets daily",
-                    "Auto-advance to next thikr on completion",
-                    "Haptic feedback on athkar counter (mobile)",
-                    "Improved Arabic phrasing in athkar texts",
-                    "Installable as a PWA with offline support",
-                    "Verse sharing with WhatsApp image generation",
-                  ].map((item, i) => (
+                  {([t('update1'), t('update2'), t('update3'), t('update4'), t('update5'), t('update6')] as string[]).map((item, i) => (
                     <li key={i} className="flex items-start gap-2 text-gray-400 font-english text-sm">
                       <span className="w-1 h-1 rounded-full bg-emerald-500/50 mt-2 flex-shrink-0" />
                       <span>{item}</span>
@@ -119,18 +106,18 @@ export default function AboutPage() {
           {/* Credits */}
           <section>
             <h2 className="text-sm font-medium font-english text-gray-400 uppercase tracking-wider mb-4">
-              Credits
+              {t('credits')}
             </h2>
             <div className="space-y-2 text-gray-500 font-english text-sm">
               <p>
-                Quran data provided by{" "}
+                {t('quranData')}{" "}
                 <Link href="https://quran.com" target="_blank" rel="noopener noreferrer"
                   className="text-emerald-500/80 hover:text-emerald-400 transition-colors">
-                  Quran.com API
+                  {t('quranApi')}
                 </Link>
               </p>
               <p>
-                Athkar sourced from <span className="text-gray-600">Hisn al-Muslim (حصن المسلم)</span>
+                {t('athkarSource')} <span className="text-gray-600">{t('hisnAlMuslim')}</span>
               </p>
             </div>
           </section>

@@ -3,7 +3,8 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { Dialog, DialogPanel, Transition, TransitionChild } from "@headlessui/react";
 import { surahs } from "@/lib/surahs";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/i18n/navigation";
+import { useTranslations } from "next-intl";
 import { useSettings } from "@/context/SettingsContext";
 
 interface VerseResult {
@@ -21,6 +22,7 @@ export default function CommandPalette() {
   const [searching, setSearching] = useState(false);
   const router = useRouter();
   const debounceRef = useRef<NodeJS.Timeout>(undefined);
+  const t = useTranslations('search');
 
   // Filter surahs locally (instant)
   const filteredSurahs =
@@ -124,7 +126,7 @@ export default function CommandPalette() {
                 <input
                   className="h-12 w-full border-0 bg-transparent pl-11 pr-4 text-gray-100
                     placeholder:text-gray-600 focus:ring-0 text-sm font-english outline-none"
-                  placeholder="Search surahs, verses, or translations..."
+                  placeholder={t('placeholder')}
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
                   onKeyDown={(e) => {
@@ -142,7 +144,7 @@ export default function CommandPalette() {
                 {filteredSurahs.length > 0 && (
                   <div>
                     <p className="px-4 pt-3 pb-1 text-[11px] text-gray-600 font-english uppercase tracking-wider">
-                      Surahs
+                      {t('surahs')}
                     </p>
                     {filteredSurahs.slice(0, 5).map((surah) => (
                       <button
@@ -170,7 +172,7 @@ export default function CommandPalette() {
                 {verseResults.length > 0 && (
                   <div>
                     <p className="px-4 pt-3 pb-1 text-[11px] text-gray-600 font-english uppercase tracking-wider">
-                      Verses
+                      {t('verses')}
                     </p>
                     {verseResults.map((result) => {
                       const [surahId, verseNum] = result.verse_key.split(":");
@@ -210,36 +212,36 @@ export default function CommandPalette() {
                     className="w-full p-3 text-center text-xs text-emerald-400 hover:text-emerald-300
                       hover:bg-white/[0.03] transition-colors border-t border-white/[0.04] font-english"
                   >
-                    See all results for &ldquo;{query}&rdquo; →
+                    {t('seeAllResults', { query })} →
                   </button>
                 )}
 
                 {/* Loading state */}
                 {searching && verseResults.length === 0 && filteredSurahs.length === 0 && (
                   <div className="py-8 text-center">
-                    <p className="text-sm text-gray-600 font-english">Searching...</p>
+                    <p className="text-sm text-gray-600 font-english">{t('searching')}</p>
                   </div>
                 )}
 
                 {/* No results */}
                 {query.length >= 3 && !searching && !hasResults && (
                   <div className="py-8 text-center">
-                    <p className="text-sm text-gray-600 font-english">No results found</p>
+                    <p className="text-sm text-gray-600 font-english">{t('noResults')}</p>
                   </div>
                 )}
 
                 {/* Empty state */}
                 {query === "" && (
                   <div className="py-12 px-6 text-center">
-                    <p className="text-sm text-gray-400 font-english">Search the Quran</p>
-                    <p className="mt-1 text-xs text-gray-700 font-english">by surah name, verse text, or translation</p>
+                    <p className="text-sm text-gray-400 font-english">{t('searchQuran')}</p>
+                    <p className="mt-1 text-xs text-gray-700 font-english">{t('searchByName')}</p>
                   </div>
                 )}
 
                 {/* Typing hint */}
                 {query.length > 0 && query.length < 3 && filteredSurahs.length === 0 && (
                   <div className="py-8 text-center">
-                    <p className="text-xs text-gray-600 font-english">Type at least 3 characters to search verses</p>
+                    <p className="text-xs text-gray-600 font-english">{t('typeAtLeast')}</p>
                   </div>
                 )}
               </div>

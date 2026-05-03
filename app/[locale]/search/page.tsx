@@ -1,10 +1,19 @@
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import type { Metadata } from "next";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 
-export const metadata: Metadata = {
-  title: "Search the Quran",
-  description: "Search the Holy Quran by translation text",
-};
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "search" });
+  return {
+    title: t("pageTitle"),
+    description: t("pageDescription"),
+  };
+}
 
 interface SearchResult {
   verse_key: string;
@@ -39,11 +48,14 @@ async function searchQuran(query: string, page: number): Promise<SearchResponse 
   return JSON.parse(text);
 }
 
-export default async function SearchPage(
-  props: {
-    searchParams: Promise<{ q?: string; page?: string }>;
-  }
-) {
+export default async function SearchPage(props: {
+  params: Promise<{ locale: string }>;
+  searchParams: Promise<{ q?: string; page?: string }>;
+}) {
+  const { locale } = await props.params;
+  setRequestLocale(locale);
+  const t = await getTranslations("search");
+
   const searchParams = await props.searchParams;
   const query = searchParams.q || "";
   const page = Math.max(1, parseInt(searchParams.page || "1", 10));
@@ -52,7 +64,7 @@ export default async function SearchPage(
   return (
     <main className="min-h-screen pt-24 pb-32 px-4 md:px-8 max-w-3xl mx-auto">
       {/* Search input */}
-      <form action="/search" method="GET" className="mb-8">
+      <form action={`/${locale}/search`} method="GET" className="mb-8">
         <div className="relative">
           <svg
             className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-600"
@@ -65,7 +77,7 @@ export default async function SearchPage(
             type="text"
             name="q"
             defaultValue={query}
-            placeholder="Search the Quran..."
+            placeholder={t("pagePlaceholder")}
             autoFocus
             className="w-full pl-11 pr-4 py-3 rounded-xl
               bg-white/[0.03] border border-white/[0.06]
@@ -80,7 +92,7 @@ export default async function SearchPage(
       {data && data.search.total_results > 0 && (
         <>
           <p className="text-xs text-gray-600 font-english mb-6">
-            {data.search.total_results} results for &ldquo;{query}&rdquo;
+            {t("resultsFor", { count: data.search.total_results, query })}
           </p>
 
           <div className="space-y-4">
@@ -126,11 +138,11 @@ export default async function SearchPage(
                     text-gray-300 hover:text-white hover:border-white/[0.1]
                     transition-all duration-200"
                 >
-                  Previous
+                  {t("previous")}
                 </Link>
               )}
               <span className="text-sm text-gray-600">
-                Page {page} of {data.search.total_pages}
+                {t("pageOf", { page, total: data.search.total_pages })}
               </span>
               {page < data.search.total_pages && (
                 <Link
@@ -140,7 +152,7 @@ export default async function SearchPage(
                     text-gray-300 hover:text-white hover:border-white/[0.1]
                     transition-all duration-200"
                 >
-                  Next
+                  {t("next")}
                 </Link>
               )}
             </div>
@@ -152,10 +164,10 @@ export default async function SearchPage(
       {data && data.search.total_results === 0 && (
         <div className="text-center py-20">
           <p className="text-gray-600 font-english text-sm">
-            No results found for &ldquo;{query}&rdquo;
+            {t("noResultsFor", { query })}
           </p>
           <p className="text-xs text-gray-700 font-english mt-1">
-            Try searching in English (e.g. &ldquo;mercy&rdquo;, &ldquo;patience&rdquo;)
+            {t("trySearching")}
           </p>
         </div>
       )}
@@ -164,7 +176,7 @@ export default async function SearchPage(
       {!query && (
         <div className="text-center py-20">
           <p className="text-gray-500 font-english text-sm">
-            Search the Quran by English translation
+            {t("searchByTranslation")}
           </p>
         </div>
       )}

@@ -1,8 +1,10 @@
 "use client";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
+import { useTranslations } from "next-intl";
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
+  const t = useTranslations('footer');
 
   const featuredSurahs = [
     { id: 1, name: "Al-Fatihah" },
@@ -22,17 +24,17 @@ export default function Footer() {
               <div className="w-7 h-7 rounded-md bg-emerald-500 flex items-center justify-center">
                 <span className="text-gray-950 font-bold font-english text-xs">Q</span>
               </div>
-              <span className="text-white/80 font-english font-medium text-sm">Quran App</span>
+              <span className="text-white/80 font-english font-medium text-sm">{t('appName')}</span>
             </Link>
             <p className="text-gray-600 text-sm font-english leading-relaxed max-w-xs">
-              A minimal, ad-free Quran reading experience built for focus and reflection.
+              {t('tagline')}
             </p>
           </div>
 
           {/* Featured Surahs */}
           <div>
             <h3 className="text-gray-500 font-english font-medium mb-4 text-xs uppercase tracking-wider">
-              Featured
+              {t('featured')}
             </h3>
             <ul className="space-y-2">
               {featuredSurahs.map((surah) => (
@@ -52,7 +54,7 @@ export default function Footer() {
           {/* Developer */}
           <div>
             <h3 className="text-gray-500 font-english font-medium mb-4 text-xs uppercase tracking-wider">
-              Developer
+              {t('developer')}
             </h3>
             <Link
               href="https://awab.design"
@@ -78,13 +80,13 @@ export default function Footer() {
         {/* Bottom */}
         <div className="border-t border-white/[0.04] pt-6 flex flex-col sm:flex-row justify-between items-center gap-3">
           <p className="text-gray-700 text-xs font-english">
-            &copy; {currentYear} Quran App
+            {t('copyright', { year: currentYear })}
           </p>
           <p className="text-gray-700 text-xs font-english">
-            Data from{" "}
+            {t('dataFrom')}{" "}
             <Link href="https://quran.com" target="_blank" rel="noopener noreferrer"
               className="text-gray-600 hover:text-gray-400 transition-colors">
-              Quran.com API
+              {t('quranApi')}
             </Link>
           </p>
         </div>

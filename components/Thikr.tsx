@@ -1,6 +1,7 @@
 "use client";
 import { useState, useCallback, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useTranslations } from "next-intl";
 
 interface ThikrProps {
   Count: number;
@@ -51,6 +52,7 @@ function ConfettiParticle({ index }: { index: number }) {
 }
 
 export default function Thikr({ Count, thikr, source, benefit, externalCount, onCountChange, inline = false }: ThikrProps) {
+  const t = useTranslations("athkar");
   const [internalCount, setInternalCount] = useState(externalCount ?? 0);
   const [showRipple, setShowRipple] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
@@ -227,7 +229,7 @@ export default function Thikr({ Count, thikr, source, benefit, externalCount, on
 
             <div className="flex flex-col">
               <span className="text-xs text-gray-500 font-english">
-                {completed ? "Completed!" : "Remaining"}
+                {completed ? t("completed") : t("remaining")}
               </span>
               {!completed && (
                 <span className="text-xs text-gray-600 font-english">
@@ -251,7 +253,7 @@ export default function Thikr({ Count, thikr, source, benefit, externalCount, on
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
-                Reset
+                {t("reset")}
               </motion.button>
             )}
           </AnimatePresence>

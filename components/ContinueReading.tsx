@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
-import Link from "next/link";
+import { useTranslations } from "next-intl";
+import { Link } from "@/i18n/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 
 interface ReadingProgress {
@@ -12,6 +13,7 @@ interface ReadingProgress {
 }
 
 export default function ContinueReading() {
+  const t = useTranslations("continueReading");
   const [lastRead, setLastRead] = useState<ReadingProgress | null>(null);
   const [mounted, setMounted] = useState(false);
 
@@ -35,10 +37,10 @@ export default function ContinueReading() {
     const diffHours = Math.floor(diffMs / 3600000);
     const diffDays = Math.floor(diffMs / 86400000);
 
-    if (diffMins < 1) return 'Just now';
-    if (diffMins < 60) return `${diffMins}m ago`;
-    if (diffHours < 24) return `${diffHours}h ago`;
-    if (diffDays < 7) return `${diffDays}d ago`;
+    if (diffMins < 1) return t('justNow');
+    if (diffMins < 60) return t('minutesAgo', { count: diffMins });
+    if (diffHours < 24) return t('hoursAgo', { count: diffHours });
+    if (diffDays < 7) return t('daysAgo', { count: diffDays });
     return then.toLocaleDateString();
   };
 
@@ -76,12 +78,12 @@ export default function ContinueReading() {
 
               <div className="flex-1 min-w-0">
                 <p className="text-[11px] text-gray-600 font-english mb-0.5 flex items-center gap-1.5">
-                  <span>Continue reading</span>
+                  <span>{t('label')}</span>
                   <span className="text-gray-700">&middot;</span>
                   <span>{getRelativeTime(lastRead.timestamp)}</span>
                 </p>
                 <p className="text-sm text-gray-200 font-english truncate group-hover:text-white transition-colors">
-                  {lastRead.surahName}{lastRead.verseNumber ? `, Verse ${lastRead.verseNumber}` : ''}
+                  {lastRead.surahName}{lastRead.verseNumber ? `, ${t('verse', { number: lastRead.verseNumber })}` : ''}
                 </p>
               </div>
 

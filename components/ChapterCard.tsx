@@ -1,5 +1,6 @@
 "use client";
-import Link from "next/link";
+import { useTranslations } from "next-intl";
+import { Link } from "@/i18n/navigation";
 
 export default function ChapterCard({
   id,
@@ -8,6 +9,7 @@ export default function ChapterCard({
   verses,
   place,
 }: any) {
+  const t = useTranslations("surah");
   return (
     <Link
       href={`/${id}`}
@@ -36,7 +38,7 @@ export default function ChapterCard({
             {enName}
           </span>
           <span className="text-[10px] text-gray-600 uppercase tracking-wider font-english">
-            {verses} ayahs &middot; {place === 'makkah' ? 'Meccan' : 'Medinan'}
+            {verses} {t("ayahs")} &middot; {place === 'makkah' ? t("meccan") : t("medinan")}
           </span>
         </div>
       </div>

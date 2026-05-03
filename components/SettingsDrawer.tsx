@@ -2,6 +2,7 @@
 
 import { useSettings } from "@/context/SettingsContext";
 import { Dialog, DialogPanel, DialogTitle, Transition, TransitionChild } from "@headlessui/react";
+import { useTranslations } from "next-intl";
 import { useReadingNav } from "./Navbar";
 
 export default function SettingsDrawer() {
@@ -9,6 +10,7 @@ export default function SettingsDrawer() {
   const readingNav = useReadingNav();
   const isOpen = readingNav?.settingsOpen ?? false;
   const setIsOpen = readingNav?.setSettingsOpen ?? (() => {});
+  const t = useTranslations('settings');
 
   const fontSizePresets = [
     { label: "S", value: 22 },
@@ -63,7 +65,7 @@ export default function SettingsDrawer() {
                       {/* Header */}
                       <div className="px-5 py-4 border-b border-white/[0.04] flex items-center justify-between">
                         <DialogTitle className="text-sm font-medium text-white font-english">
-                          Settings
+                          {t('title')}
                         </DialogTitle>
                         <button
                           onClick={() => setIsOpen(false)}
@@ -81,7 +83,7 @@ export default function SettingsDrawer() {
                         <div className="space-y-3">
                           <div className="flex items-center justify-between">
                             <h3 className="text-xs font-medium text-gray-400 font-english uppercase tracking-wider">
-                              Font Size
+                              {t('fontSize')}
                             </h3>
                             <span className="text-[11px] text-emerald-500 font-english">
                               {fontSize}px
@@ -135,7 +137,7 @@ export default function SettingsDrawer() {
                         {/* Reading Mode */}
                         <div className="space-y-3">
                           <h3 className="text-xs font-medium text-gray-400 font-english uppercase tracking-wider">
-                            Layout
+                            {t('layout')}
                           </h3>
 
                           <div className="grid grid-cols-2 gap-2">
@@ -158,7 +160,7 @@ export default function SettingsDrawer() {
                               </div>
                               <p className={`text-[11px] font-english
                                 ${readingMode === "flow" ? "text-emerald-400" : "text-gray-500"}`}>
-                                Flow
+                                {t('flow')}
                               </p>
                             </button>
 
@@ -184,7 +186,7 @@ export default function SettingsDrawer() {
                               </div>
                               <p className={`text-[11px] font-english
                                 ${readingMode === "spread" ? "text-emerald-400" : "text-gray-500"}`}>
-                                Spread
+                                {t('spread')}
                               </p>
                             </button>
                           </div>
@@ -193,7 +195,7 @@ export default function SettingsDrawer() {
                         {/* Translation Toggle */}
                         <div className="space-y-3">
                           <h3 className="text-xs font-medium text-gray-400 font-english uppercase tracking-wider">
-                            Translation
+                            {t('translation')}
                           </h3>
                           <button
                             onClick={() => setShowTranslation(!showTranslation)}
@@ -201,8 +203,8 @@ export default function SettingsDrawer() {
                               bg-white/[0.02] border border-white/[0.04] transition-colors"
                           >
                             <div>
-                              <p className="text-sm text-gray-300 font-english text-left">English Translation</p>
-                              <p className="text-[11px] text-gray-600 font-english text-left">Saheeh International</p>
+                              <p className="text-sm text-gray-300 font-english text-left">{t('englishTranslation')}</p>
+                              <p className="text-[11px] text-gray-600 font-english text-left">{t('saheehInternational')}</p>
                             </div>
                             <div className={`w-9 h-5 rounded-full transition-colors duration-200 flex items-center px-0.5
                               ${showTranslation ? "bg-emerald-500" : "bg-white/[0.08]"}`}>

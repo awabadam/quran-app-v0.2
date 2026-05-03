@@ -1,10 +1,12 @@
 "use client";
 
 import { useBookmarks, Bookmark } from "@/context/BookmarkContext";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { motion, AnimatePresence } from "framer-motion";
+import { useTranslations } from "next-intl";
 
 export default function BookmarksPage() {
+  const t = useTranslations("bookmarks");
   const { bookmarks, removeBookmark } = useBookmarks();
 
   // Group bookmarks by surah
@@ -23,10 +25,10 @@ export default function BookmarksPage() {
     <main className="min-h-screen pt-24 pb-32 px-4 md:px-8 max-w-3xl mx-auto">
       <div className="mb-8">
         <h1 className="text-xl md:text-2xl font-semibold font-english text-white mb-1.5">
-          Bookmarks
+          {t("title")}
         </h1>
         <p className="text-gray-600 font-english text-sm">
-          {bookmarks.length} saved verse{bookmarks.length !== 1 ? "s" : ""}
+          {t("savedVerses", { count: bookmarks.length })}
         </p>
       </div>
 
@@ -93,9 +95,9 @@ export default function BookmarksPage() {
             <path strokeLinecap="round" strokeLinejoin="round"
               d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0111.186 0z" />
           </svg>
-          <p className="text-gray-600 font-english text-sm">No bookmarks yet</p>
+          <p className="text-gray-600 font-english text-sm">{t("noBookmarks")}</p>
           <p className="text-xs text-gray-700 font-english mt-1">
-            Hover over a verse number while reading to bookmark it
+            {t("hoverToBookmark")}
           </p>
         </div>
       )}

@@ -1,5 +1,6 @@
 "use client";
 import { useState, useMemo } from "react";
+import { useTranslations } from "next-intl";
 import { motion, AnimatePresence } from "framer-motion";
 import ChapterCard from "./ChapterCard";
 import JuzCard from "./JuzCard";
@@ -40,16 +41,18 @@ const itemVariants = {
   },
 } as const;
 
-const filterPills: { label: string; value: RevelationFilter }[] = [
-  { label: "All", value: "all" },
-  { label: "Meccan", value: "makkah" },
-  { label: "Medinan", value: "madinah" },
-];
-
 export default function SurahBrowser({ chapters, juzs = [] }: { chapters: Chapter[]; juzs?: Juz[] }) {
+  const t = useTranslations("browser");
+  const tSurah = useTranslations("surah");
   const [searchQuery, setSearchQuery] = useState("");
   const [revelationFilter, setRevelationFilter] = useState<RevelationFilter>("all");
   const [browseMode, setBrowseMode] = useState<BrowseMode>("surahs");
+
+  const filterPills: { label: string; value: RevelationFilter }[] = [
+    { label: t("all"), value: "all" },
+    { label: tSurah("meccan"), value: "makkah" },
+    { label: tSurah("medinan"), value: "madinah" },
+  ];
 
   const filtered = useMemo(() => {
     return chapters.filter((ch) => {
@@ -88,7 +91,7 @@ export default function SurahBrowser({ chapters, juzs = [] }: { chapters: Chapte
               className={`text-xl md:text-2xl font-semibold font-english transition-colors duration-200
                 ${browseMode === "surahs" ? "text-white" : "text-gray-600 hover:text-gray-400"}`}
             >
-              Surahs
+              {t("surahs")}
             </button>
             <span className="text-gray-700">|</span>
             <button
@@ -96,11 +99,11 @@ export default function SurahBrowser({ chapters, juzs = [] }: { chapters: Chapte
               className={`text-xl md:text-2xl font-semibold font-english transition-colors duration-200
                 ${browseMode === "juz" ? "text-white" : "text-gray-600 hover:text-gray-400"}`}
             >
-              Juz
+              {t("juz")}
             </button>
           </div>
           <p className="text-gray-600 font-english text-sm">
-            {browseMode === "surahs" ? "114 chapters of the Holy Quran" : "30 parts of the Holy Quran"}
+            {browseMode === "surahs" ? t("chaptersDescription") : t("partsDescription")}
           </p>
         </div>
 
@@ -116,7 +119,7 @@ export default function SurahBrowser({ chapters, juzs = [] }: { chapters: Chapte
               </svg>
               <input
                 type="text"
-                placeholder="Search surahs..."
+                placeholder={t("searchPlaceholder")}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full pl-9 pr-4 py-2 rounded-full
@@ -150,7 +153,7 @@ export default function SurahBrowser({ chapters, juzs = [] }: { chapters: Chapte
       {/* Results count */}
       {browseMode === "surahs" && (searchQuery || revelationFilter !== "all") && (
         <p className="text-xs text-gray-600 font-english mb-4">
-          {filtered.length} surah{filtered.length !== 1 ? "s" : ""}
+          {t("surahCount", { count: filtered.length })}
         </p>
       )}
 
@@ -183,12 +186,12 @@ export default function SurahBrowser({ chapters, juzs = [] }: { chapters: Chapte
               animate={{ opacity: 1 }}
               className="text-center py-20"
             >
-              <p className="text-gray-600 font-english text-sm">No surahs found</p>
+              <p className="text-gray-600 font-english text-sm">{t("noSurahs")}</p>
               <button
                 onClick={() => { setSearchQuery(""); setRevelationFilter("all"); }}
                 className="mt-2 text-xs text-emerald-500 hover:text-emerald-400 font-english transition-colors"
               >
-                Clear filters
+                {t("clearFilters")}
               </button>
             </motion.div>
           )}

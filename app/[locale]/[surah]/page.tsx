@@ -1,27 +1,31 @@
 import { Bismillah, SideMenu } from "@/components";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import React, { Suspense } from "react";
 import SurahView from "@/components/SurahView";
 import SurahHeader from "@/components/SurahHeader";
 import VerseHighlighter from "./VerseHighlighter";
 import { notFound } from "next/navigation";
+import { setRequestLocale, getTranslations } from "next-intl/server";
 
 export async function generateMetadata(props: any) {
   const params = await props.params;
+  const t = await getTranslations({ locale: params.locale, namespace: "surah" });
   const surahMeta: any = await fetch(
-    `https://api.quran.com/api/v4/chapters/${params.surah}?language=en`
+    `https://api.quran.com/api/v4/chapters/${params.surah}?language=${params.locale === "ar" ? "ar" : "en"}`
   ).then((res) => res.json());
 
-  if (!surahMeta?.chapter) return { title: "Surah Not Found" };
+  if (!surahMeta?.chapter) return { title: t("notFound") };
 
   return {
-    title: `Surah ${surahMeta.chapter.name_simple} - ${surahMeta.chapter.name_arabic}`,
-    description: `Read Surah ${surahMeta.chapter.name_simple} (${surahMeta.chapter.name_arabic}) - ${surahMeta.chapter.verses_count} verses`,
+    title: t("surahTitle", { name: surahMeta.chapter.name_simple, arabic: surahMeta.chapter.name_arabic }),
+    description: t("surahDescription", { name: surahMeta.chapter.name_simple, arabic: surahMeta.chapter.name_arabic, count: surahMeta.chapter.verses_count }),
   };
 }
 
 export default async function Page(props: any) {
   const params = await props.params;
+  setRequestLocale(params.locale);
+  const t = await getTranslations("surah");
   const [surah, versesInfo, surahMeta, translationsData] = await Promise.all([
     fetch(
       `https://api.quran.com/api/v4/quran/verses/uthmani?chapter_number=${params.surah}`,
@@ -113,7 +117,7 @@ export default async function Page(props: any) {
                 <svg className="w-4 h-4 rotate-180 group-hover:-translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                 </svg>
-                Previous
+                {t("previous")}
               </Link>
             ) : <div />}
 
@@ -121,7 +125,7 @@ export default async function Page(props: any) {
               href="/"
               className="text-sm text-gray-500 hover:text-gray-300 transition-colors"
             >
-              All Surahs
+              {t("allSurahs")}
             </Link>
 
             {surahNum < 114 ? (
@@ -133,7 +137,7 @@ export default async function Page(props: any) {
                   text-gray-400 hover:text-white
                   transition-all duration-200"
               >
-                Next
+                {t("next")}
                 <svg className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                 </svg>

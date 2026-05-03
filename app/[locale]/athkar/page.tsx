@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect, useCallback } from "react";
+import { useTranslations } from "next-intl";
 import { motion, AnimatePresence } from "framer-motion";
 import Thikr from "@/components/Thikr";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
@@ -36,6 +37,7 @@ function vibrate(pattern: number | number[]) {
 }
 
 export default function AthkarPage() {
+  const t = useTranslations("athkar");
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [selectedThikr, setSelectedThikr] = useState<any>(null);
 
@@ -49,8 +51,8 @@ export default function AthkarPage() {
   }, [counts]);
 
   const tabs = [
-    { 
-      title: "Morning", 
+    {
+      title: t("morning"),
       arabicTitle: "أذكار الصباح",
       data: athkarData.morning,
       icon: (
@@ -61,8 +63,8 @@ export default function AthkarPage() {
         </svg>
       ),
     },
-    { 
-      title: "Evening", 
+    {
+      title: t("evening"),
       arabicTitle: "أذكار المساء",
       data: athkarData.evening,
       icon: (
@@ -73,8 +75,8 @@ export default function AthkarPage() {
         </svg>
       ),
     },
-    { 
-      title: "Sleep", 
+    {
+      title: t("sleep"),
       arabicTitle: "أذكار النوم",
       data: athkarData.sleep,
       icon: (
@@ -138,10 +140,10 @@ export default function AthkarPage() {
             </svg>
           </div>
           <h1 className="text-3xl md:text-4xl font-semibold font-english text-white mb-2">
-            Daily Athkar
+            {t("title")}
           </h1>
           <p className="text-gray-500 font-english">
-            Morning • Evening • Sleep
+            {t("subtitle")}
           </p>
         </div>
 
@@ -205,7 +207,7 @@ export default function AthkarPage() {
                       </h2>
                       <div className="flex items-center justify-center gap-3">
                         <p className="text-gray-500 text-sm font-english">
-                          {getCompletedCount(tab.data)} of {tab.data.length} completed
+                          {t("completedOf", { completed: getCompletedCount(tab.data), total: tab.data.length })}
                         </p>
                         {getCompletedCount(tab.data) > 0 && (
                           <button
@@ -220,7 +222,7 @@ export default function AthkarPage() {
                             className="text-[11px] text-gray-600 hover:text-red-400 font-english
                               px-2 py-0.5 rounded-md hover:bg-red-500/10 transition-colors"
                           >
-                            Reset all
+                            {t("resetAll")}
                           </button>
                         )}
                       </div>
@@ -298,11 +300,11 @@ export default function AthkarPage() {
                             <div className="flex items-center justify-between mt-3 pt-3 border-t border-gray-800/50">
                               {currentCount > 0 && !completed ? (
                                 <p className="text-[10px] text-emerald-400 font-english">
-                                  {currentCount}/{wird.count} done
+                                  {t("done", { current: currentCount, total: wird.count })}
                                 </p>
                               ) : (
                                 <p className="text-[10px] text-gray-500 font-english">
-                                  {wird.count === 1 ? "Once" : `${wird.count}×`}
+                                  {wird.count === 1 ? t("once") : t("times", { count: wird.count })}
                                 </p>
                               )}
                               <svg className={`w-4 h-4 transition-all
@@ -387,8 +389,8 @@ export default function AthkarPage() {
                     </h3>
                     <p className="text-xs text-gray-500 font-english">
                       {isCompleted(selectedThikr.id, selectedThikr.count)
-                        ? "Completed!"
-                        : "Tap to count"
+                        ? t("completed")
+                        : t("tapToCount")
                       }
                     </p>
                   </div>
@@ -404,7 +406,7 @@ export default function AthkarPage() {
                         px-3 py-1.5 rounded-lg hover:bg-red-500/10
                         border border-transparent hover:border-red-500/20 font-english"
                     >
-                      Reset
+                      {t("reset")}
                     </button>
                   )}
                   <button
@@ -452,14 +454,14 @@ export default function AthkarPage() {
                           text-emerald-400 text-sm font-english
                           transition-all duration-200 active:scale-95"
                       >
-                        Next
+                        {t("next")}
                         <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                         </svg>
                       </button>
                     ) : (
                       <p className="text-sm text-emerald-400 font-english">
-                        All done for this section!
+                        {t("allDone")}
                       </p>
                     )}
                   </motion.div>

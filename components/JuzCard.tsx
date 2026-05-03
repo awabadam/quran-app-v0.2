@@ -1,4 +1,6 @@
-import Link from "next/link";
+"use client";
+import { Link } from "@/i18n/navigation";
+import { useTranslations } from "next-intl";
 
 interface JuzCardProps {
   juzNumber: number;
@@ -9,6 +11,7 @@ interface JuzCardProps {
 }
 
 export default function JuzCard({ juzNumber, versesCount, surahRange, firstSurahId, firstVerse }: JuzCardProps) {
+  const t = useTranslations("browser");
   return (
     <Link href={`/${firstSurahId}?verse=${firstVerse}`}>
       <div className="group p-4 rounded-2xl
@@ -24,10 +27,10 @@ export default function JuzCard({ juzNumber, versesCount, surahRange, firstSurah
           </div>
           <div>
             <p className="text-sm text-gray-200 font-english font-medium group-hover:text-white transition-colors">
-              Juz {juzNumber}
+              {t("juzNumber", { number: juzNumber })}
             </p>
             <p className="text-xs text-gray-600 font-english">
-              {versesCount} verses
+              {t("verses", { count: versesCount })}
             </p>
           </div>
         </div>

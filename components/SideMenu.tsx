@@ -2,7 +2,8 @@
 
 import React, { useState } from "react";
 import { Dialog, DialogPanel, Transition, TransitionChild } from "@headlessui/react";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
+import { useTranslations } from "next-intl";
 import { surahs } from "@/lib/surahs";
 import { useReadingNav } from "./Navbar";
 
@@ -11,6 +12,7 @@ export default function SideMenu() {
   const open = readingNav?.sideMenuOpen ?? false;
   const setOpen = readingNav?.setSideMenuOpen ?? (() => {});
   const [sideTab, setSideTab] = useState<"surahs" | "juz">("surahs");
+  const t = useTranslations('browser');
 
   return (
     <div>
@@ -22,7 +24,7 @@ export default function SideMenu() {
           text-gray-400 hover:text-emerald-400 hover:border-emerald-500/20
           transition-all duration-200 shadow-lg shadow-black/20"
         onClick={() => setOpen(true)}
-        title="Surah Index"
+        title={t('surahs')}
       >
         <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
           <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
@@ -63,14 +65,14 @@ export default function SideMenu() {
                             className={`text-sm font-english transition-colors
                               ${sideTab === "surahs" ? "text-white font-medium" : "text-gray-600 hover:text-gray-400"}`}
                           >
-                            Surahs
+                            {t('surahs')}
                           </button>
                           <button
                             onClick={() => setSideTab("juz")}
                             className={`text-sm font-english transition-colors
                               ${sideTab === "juz" ? "text-white font-medium" : "text-gray-600 hover:text-gray-400"}`}
                           >
-                            Juz
+                            {t('juz')}
                           </button>
                         </div>
                         <button
@@ -112,7 +114,7 @@ export default function SideMenu() {
                               {juzNum}
                             </span>
                             <span className="text-gray-400 font-english text-sm group-hover:text-gray-200 transition-colors">
-                              Juz {juzNum}
+                              {t('juzNumber', { number: juzNum })}
                             </span>
                           </Link>
                         ))}

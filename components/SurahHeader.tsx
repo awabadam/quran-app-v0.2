@@ -1,4 +1,5 @@
 "use client";
+import { useTranslations } from "next-intl";
 import ReadingProgressBar from "./ReadingProgressBar";
 
 interface SurahHeaderProps {
@@ -16,6 +17,7 @@ export default function SurahHeader({
   versesCount,
   revelationPlace,
 }: SurahHeaderProps) {
+  const t = useTranslations("surah");
   return (
     <>
       <ReadingProgressBar />
@@ -31,7 +33,7 @@ export default function SurahHeader({
             </span>
             <div className="min-w-0">
               <h1 dir="rtl" className="font-Scheherazade_New text-xl text-white leading-tight truncate">
-                سورة {nameArabic}
+                {t("surahPrefix")} {nameArabic}
               </h1>
               <p className="text-[11px] text-gray-500 font-english mt-0.5">
                 {nameEnglish}
@@ -41,11 +43,11 @@ export default function SurahHeader({
 
           <div className="flex items-center gap-2 flex-shrink-0">
             <span className="text-[11px] text-gray-500 font-english capitalize">
-              {revelationPlace}
+              {revelationPlace === 'makkah' ? t('meccan') : t('medinan')}
             </span>
             <span className="text-gray-700">&middot;</span>
             <span className="text-[11px] text-gray-500 font-english">
-              {versesCount} ayahs
+              {versesCount} {t('ayahs')}
             </span>
           </div>
         </div>
