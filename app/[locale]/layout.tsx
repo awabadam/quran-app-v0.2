@@ -48,7 +48,7 @@ export async function generateMetadata({
     creator: "Awab Elkhalil",
     openGraph: {
       type: "website",
-      locale: locale === "ar" ? "ar_SA" : "en_US",
+      locale: locale === "ar" ? "ar_SA" : locale === "tr" ? "tr_TR" : "en_US",
       url: "https://quran.awab.design",
       siteName: t("siteName"),
       title: t("title"),

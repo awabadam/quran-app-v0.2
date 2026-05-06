@@ -53,36 +53,36 @@ export default function AthkarPage() {
   const tabs = [
     {
       title: t("morning"),
-      arabicTitle: "أذكار الصباح",
+      key: "morning",
       data: athkarData.morning,
       icon: (
         <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} 
-            d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" 
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}
+            d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"
           />
         </svg>
       ),
     },
     {
       title: t("evening"),
-      arabicTitle: "أذكار المساء",
+      key: "evening",
       data: athkarData.evening,
       icon: (
         <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} 
-            d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" 
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}
+            d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
           />
         </svg>
       ),
     },
     {
       title: t("sleep"),
-      arabicTitle: "أذكار النوم",
+      key: "sleep",
       data: athkarData.sleep,
       icon: (
         <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} 
-            d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" 
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}
+            d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"
           />
         </svg>
       ),
@@ -202,8 +202,8 @@ export default function AthkarPage() {
                   >
                     {/* Section Header */}
                     <div className="text-center mb-8">
-                      <h2 dir="rtl" className="text-2xl font-Scheherazade_New text-gray-200 mb-1">
-                        {tab.arabicTitle}
+                      <h2 className="text-2xl font-Scheherazade_New text-gray-200 mb-1">
+                        {t(`${tab.key}Title`)}
                       </h2>
                       <div className="flex items-center justify-center gap-3">
                         <p className="text-gray-500 text-sm font-english">
@@ -238,7 +238,7 @@ export default function AthkarPage() {
                         return (
                           <motion.button
                             key={`${index}-${wird.id}`}
-                            onClick={() => setSelectedThikr(wird)}
+                            onClick={() => setSelectedThikr({ ...wird, category: tab.key })}
                             initial={{ opacity: 0, y: 10 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.2, delay: wirdIndex * 0.03 }}
@@ -284,7 +284,7 @@ export default function AthkarPage() {
                             {/* English Title */}
                             <h3 className={`font-english font-medium text-sm mb-2 pr-12 transition-colors
                               ${completed ? "text-emerald-300" : "text-white group-hover:text-emerald-300"}`}>
-                              {wird.title}
+                              {t(`${tab.key}_${wird.id}_title`)}
                             </h3>
                             
                             {/* Arabic Text Preview */}
@@ -385,7 +385,7 @@ export default function AthkarPage() {
                   </button>
                   <div className="min-w-0">
                     <h3 className="text-white font-english font-medium text-sm truncate">
-                      {selectedThikr.title}
+                      {t(`${selectedThikr.category}_${selectedThikr.id}_title`)}
                     </h3>
                     <p className="text-xs text-gray-500 font-english">
                       {isCompleted(selectedThikr.id, selectedThikr.count)
@@ -427,8 +427,8 @@ export default function AthkarPage() {
                 <Thikr
                   thikr={selectedThikr.text}
                   Count={selectedThikr.count}
-                  source={selectedThikr.source}
-                  benefit={selectedThikr.benefit}
+                  source={t(`${selectedThikr.category}_${selectedThikr.id}_source`)}
+                  benefit={t(`${selectedThikr.category}_${selectedThikr.id}_benefit`)}
                   externalCount={getCount(selectedThikr.id)}
                   onCountChange={(newCount) => handleCountChange(selectedThikr.id, newCount, selectedThikr.count)}
                   inline
@@ -446,7 +446,8 @@ export default function AthkarPage() {
                       <button
                         onClick={(e) => {
                           e.stopPropagation();
-                          setSelectedThikr(getNextThikr(selectedThikr.id));
+                          const next = getNextThikr(selectedThikr.id);
+                          if (next) setSelectedThikr({ ...next, category: selectedThikr.category });
                         }}
                         className="flex items-center gap-2 px-5 py-2.5 rounded-xl
                           bg-emerald-500/10 border border-emerald-500/20
