@@ -373,6 +373,13 @@
     "dataFrom": "Veriler",
     "quranApi": "Quran.com API"
   },
+  "install": {
+    "install": "Uygulamayı Yükle",
+    "iosTitle": "Kur'an Uygulamasını Yükle",
+    "iosStep1": "Paylaş düğmesine dokunun",
+    "iosStep2": "Aşağı kaydırın ve \"Ana Ekrana Ekle\"ye dokunun",
+    "iosStep3": "Yüklemek için \"Ekle\"ye dokunun"
+  },
   "common": {
     "next": "Sonraki",
     "previous": "Önceki",

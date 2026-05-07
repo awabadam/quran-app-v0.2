@@ -373,6 +373,13 @@
     "dataFrom": "Data from",
     "quranApi": "Quran.com API"
   },
+  "install": {
+    "install": "Install App",
+    "iosTitle": "Install Quran App",
+    "iosStep1": "Tap the Share button",
+    "iosStep2": "Scroll down and tap \"Add to Home Screen\"",
+    "iosStep3": "Tap \"Add\" to install"
+  },
   "common": {
     "next": "Next",
     "previous": "Previous",

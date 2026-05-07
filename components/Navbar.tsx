@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 import { useSettings } from "@/context/SettingsContext";
 import { surahs } from "@/lib/surahs";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
+import InstallPWA from "@/components/InstallPWA";
 
 // Context so SideMenu and SettingsDrawer can be opened from the navbar
 export const ReadingNavContext = createContext<{
@@ -143,6 +144,7 @@ export default function Navbar() {
 
             {/* Right controls */}
             <div className="flex items-center gap-2">
+              <InstallPWA />
               <LanguageSwitcher />
               <button
                 onClick={() => setIsSearchOpen(true)}
