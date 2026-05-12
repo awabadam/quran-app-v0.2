@@ -7,6 +7,10 @@ import VerseHighlighter from "./VerseHighlighter";
 import { notFound } from "next/navigation";
 import { setRequestLocale, getTranslations } from "next-intl/server";
 
+export function generateStaticParams() {
+  return Array.from({ length: 114 }, (_, i) => ({ surah: String(i + 1) }));
+}
+
 export async function generateMetadata(props: any) {
   const params = await props.params;
   const t = await getTranslations({ locale: params.locale, namespace: "surah" });
@@ -29,19 +33,19 @@ export default async function Page(props: any) {
   const [surah, versesInfo, surahMeta, translationsData] = await Promise.all([
     fetch(
       `https://api.quran.com/api/v4/quran/verses/uthmani?chapter_number=${params.surah}`,
-      { next: { revalidate: 3600 } }
+      { next: { revalidate: 604800 } }
     ).then((res) => res.json()),
     fetch(
       `https://api.quran.com/api/v4/verses/by_chapter/${params.surah}?per_page=300`,
-      { next: { revalidate: 3600 } }
+      { next: { revalidate: 604800 } }
     ).then((res) => res.json()),
     fetch(
       `https://api.quran.com/api/v4/chapters/${params.surah}?language=ar`,
-      { next: { revalidate: 3600 } }
+      { next: { revalidate: 604800 } }
     ).then((res) => res.json()),
     fetch(
       `https://api.quran.com/api/v4/quran/translations/20?chapter_number=${params.surah}`,
-      { next: { revalidate: 3600 } }
+      { next: { revalidate: 604800 } }
     ).then((res) => res.json()),
   ]);
 

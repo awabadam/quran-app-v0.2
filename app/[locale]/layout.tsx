@@ -7,6 +7,7 @@ import { SettingsProvider } from "@/context/SettingsContext";
 import { BookmarkProvider } from "@/context/BookmarkContext";
 import { ReadingProgressProvider } from "@/context/ReadingProgressContext";
 import CommandPalette from "@/components/CommandPalette";
+import OfflinePrecacher from "@/components/OfflinePrecacher";
 import { NextIntlClientProvider, hasLocale } from "next-intl";
 import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
@@ -118,6 +119,7 @@ export default async function LocaleLayout({ children, params }: Props) {
                   {children}
                 </div>
                 <Footer />
+                <OfflinePrecacher locale={locale} />
               </ReadingNavProvider>
             </BookmarkProvider>
             </ReadingProgressProvider>
