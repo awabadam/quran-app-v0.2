@@ -171,12 +171,31 @@ export default function AthkarPage() {
     }
   }, [selectedThikr, modalTab, modalIndex, modalTotal]);
 
+  // Once a thikr is finished, tapping the body again jumps to the next one.
+  // The timestamp guards against the stray tap that follows the completing tap.
+  const completedAtRef = useRef(0);
+
+  const goToNextThikr = useCallback(() => {
+    if (!selectedThikr) return;
+    const next = getNextThikr(selectedThikr.id);
+    if (!next) return;
+    vibrate(10);
+    setSelectedThikr({ ...next, category: selectedThikr.category });
+  }, [selectedThikr, getNextThikr]);
+
   const handleModalTap = useCallback(() => {
     if (!selectedThikr) return;
-    if (isCompleted(selectedThikr.id, selectedThikr.count)) return;
+    if (isCompleted(selectedThikr.id, selectedThikr.count)) {
+      if (Date.now() - completedAtRef.current < 700) return;
+      goToNextThikr();
+      return;
+    }
     const newCount = getCount(selectedThikr.id) + 1;
+    if (newCount >= selectedThikr.count) {
+      completedAtRef.current = Date.now();
+    }
     handleCountChange(selectedThikr.id, newCount, selectedThikr.count);
-  }, [selectedThikr, counts, handleCountChange]);
+  }, [selectedThikr, counts, handleCountChange, goToNextThikr]);
 
   return (
     <main className="min-h-screen pt-24 pb-16">
@@ -516,7 +535,9 @@ export default function AthkarPage() {
 
                     {/* Tap hint */}
                     <p className="text-[11px] text-gray-600 font-english mb-6 sm:mb-8">
-                      {isCompleted(selectedThikr.id, selectedThikr.count) ? t("completed") : t("tapToCount")}
+                      {isCompleted(selectedThikr.id, selectedThikr.count)
+                        ? getNextThikr(selectedThikr.id) ? t("tapToContinue") : t("completed")
+                        : t("tapToCount")}
                     </p>
 
                     {/* Arabic text — large, readable */}
@@ -561,8 +582,7 @@ export default function AthkarPage() {
                               transition={{ type: "spring", stiffness: 300, damping: 20 }}
                               onClick={(e) => {
                                 e.stopPropagation();
-                                const next = getNextThikr(selectedThikr.id);
-                                if (next) setSelectedThikr({ ...next, category: selectedThikr.category });
+                                goToNextThikr();
                               }}
                               className="flex items-center gap-2 px-6 py-3 rounded-xl
                                 bg-emerald-500/15 border border-emerald-500/30
